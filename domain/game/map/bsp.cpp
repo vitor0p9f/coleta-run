@@ -2,7 +2,6 @@
 #include "bsp_tree.hpp"
 #include "hallway.hpp"
 #include "room.hpp"
-#include <cstdio>
 #include <memory>
 #include <random>
 #include <tuple>
@@ -155,14 +154,8 @@ std::vector<Hallway> BSP::connectRoomsByNearest(const std::vector<Room>& rooms, 
     hallways.emplace_back(Hallway(center_1, corner, hallway_width));
     hallways.emplace_back(Hallway(corner, center_2, hallway_width));
 
-    printf("%d\n", hallways[0].start.y);
-
     connected[room_b] = true;
     connected_count++;
-  }
-
-  for(Hallway hallway : hallways){
-        printf("y: %d\n", hallway.start.y);
   }
 
   return hallways;
