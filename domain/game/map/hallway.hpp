@@ -3,12 +3,19 @@
 #include "../../interfaces/drawable.hpp"
 #include "../types.hpp"
 
-class Hallway : public Drawable{
-  public:
-    Coordinate start, end;
-    int width;
+struct Hallway: public Drawable{
+  Point coordinate;
+  int width, height, size;
 
-    Hallway(Coordinate start, Coordinate end, int width);
+  Hallway() : coordinate(), width(0), height(0), size(0) {}
 
-    void draw(const IDrawer& drawer) const override;
+  Hallway(Point initial_coordinate, int width, int height, int size) :
+    coordinate(initial_coordinate),
+    width(width),
+    height(height),
+    size(size) {}
+ 
+  void draw(const IDrawer& drawer) const override{
+    drawer.drawHallway(*this);
+  }
 };

@@ -7,15 +7,23 @@
 
 class Map : public Drawable{
   public:
-    std::vector<std::vector<bool>> walkable_map;
-    
-    explicit Map(Area area, int room_size);
+    explicit Map(
+      Area area, 
+      int partition_width, 
+      int partition_height, 
+      int room_margin, 
+      int hallway_size
+    );
 
+    std::vector<std::vector<bool>> getWalkableMap();
+    std::vector<Room> getRooms() const;
+    std::vector<Hallway> getHallways() const;
     void draw(const IDrawer& drawer) const override;
 
   private:
-    std::vector<Room> rooms;
-    std::vector<Hallway> hallways;
+    std::vector<Room> rooms = {};
+    std::vector<Hallway> hallways = {};
+    std::vector<std::vector<bool>> walkable_map = {};
 
     std::vector<std::vector<bool>> generateWalkableMap(
         int width, 
