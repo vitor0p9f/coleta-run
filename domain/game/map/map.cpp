@@ -5,6 +5,9 @@
 
 Map::Map(Area area, int partition_width, int partition_height, int room_margin, int hallway_size){
   BSP bsp;
+
+  width = area.width;
+  height = area.height;
   
   auto [map_rooms, map_hallways] = bsp.execute(
     area, partition_width, partition_height, room_margin, hallway_size
@@ -43,10 +46,21 @@ std::vector<std::vector<bool>> Map::generateWalkableMap(
     }
   }
 
+  for (const Hallway& hallway : hallways) {
+    for (int x = hallway.coordinate.x; x < hallway.coordinate.x + hallway.width; x++) {
+      for (int y = hallway.coordinate.y; y < hallway.coordinate.y + hallway.height; y++) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+          walkable[y][x] = true;
+        }
+      }
+    }
+  }
+
+
   return walkable;
 }
 
-std::vector<std::vector<bool>> Map::getWalkableMap(){
+std::vector<std::vector<bool>> Map::getWalkableMap() const {
   return walkable_map;
 }
 
@@ -56,4 +70,12 @@ std::vector<Room> Map::getRooms() const {
 
 std::vector<Hallway> Map::getHallways() const {
   return hallways;
+}
+
+int Map::getWidth() const {
+  return width;
+}
+
+int Map::getHeight() const {
+  return height;
 }
