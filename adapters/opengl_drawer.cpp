@@ -3,6 +3,7 @@
 #include <vector>
 #include "opengl_drawer.hpp"
 #include "../domain/game/map/map.hpp"
+#include "../domain/game/player.hpp"
 
 OpenGLDrawer::OpenGLDrawer(){};
 
@@ -53,4 +54,20 @@ void OpenGLDrawer::drawMap(const Map& map) const {
 
 void OpenGLDrawer::setTileSize(int tile_size){
   this->tile_size = tile_size;
+}
+
+void OpenGLDrawer::drawPlayer(const Player& player) const {
+  int x = player.coordinate.x * tile_size;
+  int y = player.coordinate.y * tile_size;
+  int width = player.width * tile_size; 
+  int height = player.height * tile_size;
+
+  glBegin(GL_QUADS);
+    glColor3f(0.8f, 0.5f, 0.3f);
+
+    glVertex2i(x, y);
+    glVertex2i(x + width, y);
+    glVertex2i(x + width, y + height);
+    glVertex2i(x, y + height);
+  glEnd();
 }
