@@ -3,6 +3,7 @@
 class Room;
 class Hallway;
 class Map;
+class Player;
 
 class IDrawer{
   public:
@@ -14,4 +15,5 @@ class IDrawer{
     virtual void drawRoom(const Room& room) const = 0;
     virtual void drawHallway(const Hallway& hallway) const = 0;
     virtual void drawMap(const Map& map) const = 0;
+    virtual void drawPlayer(const Player& player) const = 0;
 };
