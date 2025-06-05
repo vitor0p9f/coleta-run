@@ -34,7 +34,7 @@ struct ActionPair {
 
 class OpenGLController: public IController {
   public:
-    OpenGLController(Controllable& element, const std::vector<std::vector<bool>>& walkable_map) : IController(element, walkable_map){
+    explicit OpenGLController(Controllable& element) : IController(element){
       initKeyStates();
     };
 

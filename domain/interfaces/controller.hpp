@@ -10,13 +10,11 @@ class IController{
     virtual ~IController() = default;
 
     IController(
-        Controllable& element, 
-        const std::vector<std::vector<bool>>& walkable_map
-    ) : element(element), walkable_map(walkable_map) {};
+        Controllable& element
+    ) : element(element) {};
    
     virtual void bindKeys(std::vector<Control> controls) = 0;
 
   protected:
     Controllable& element;
-    const std::vector<std::vector<bool>>& walkable_map;
 };

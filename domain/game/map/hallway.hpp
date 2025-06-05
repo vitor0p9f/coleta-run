@@ -4,17 +4,17 @@
 #include "../types.hpp"
 
 struct Hallway: public Drawable{
-  Point coordinate;
-  int width, height, size;
+  int size;
 
-  Hallway() : coordinate(), width(0), height(0), size(0) {}
+  Hallway();
 
-  Hallway(Point initial_coordinate, int width, int height, int size) :
-    coordinate(initial_coordinate),
-    width(width),
-    height(height),
-    size(size) {}
- 
+  Hallway(
+      Point coordinate, 
+      int width, 
+      int height, 
+      int size
+  ) : Drawable(coordinate, width, height), size(size){} 
+  
   void draw(const IDrawer& drawer) const override{
     drawer.drawHallway(*this);
   }
