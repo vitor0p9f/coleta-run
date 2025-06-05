@@ -2,6 +2,7 @@
 #include "bsp.hpp"
 #include "hallway.hpp"
 #include "../player.hpp"
+#include "../trash_can.hpp"
 #include <cstdio>
 #include <functional>
 #include <vector>
@@ -32,6 +33,8 @@ Map::Map(
   }
 
   walkable_map = generateWalkableMap(area.width, area.height, rooms, hallways);
+
+  spawnTrashCans();
 }
 
 void Map::draw(const IDrawer& drawer) const{
@@ -80,6 +83,10 @@ const std::vector<Room>& Map::getRooms() const {
 
 const std::vector<Hallway>& Map::getHallways() const {
   return hallways;
+}
+
+const std::vector<TrashCan>& Map::getTrashCans() const {
+  return trash_cans;
 }
 
 int Map::getWidth() const {
@@ -161,4 +168,24 @@ void Map::addPlayers(std::vector<std::reference_wrapper<Player>>& players){
   for (Player& player : players) {
     spawnInWalkableArea(player);
   }
+}
+
+void Map::spawnTrashCans(){
+  TrashCan metal = TrashCan{{0, 0}, 10, 10, METAL};
+  TrashCan paper = TrashCan{{0, 0}, 10, 10, PAPER};
+  TrashCan glass = TrashCan{{0, 0}, 10, 10, GLASS};
+  TrashCan plastic = TrashCan{{0, 0}, 10, 10, PLASTIC};
+  TrashCan organic = TrashCan{{0, 0}, 10, 10, ORGANIC};
+
+  spawnInWalkableArea(metal);
+  spawnInWalkableArea(paper);
+  spawnInWalkableArea(glass);
+  spawnInWalkableArea(plastic);
+  spawnInWalkableArea(organic);
+
+  trash_cans.emplace_back(metal);
+  trash_cans.emplace_back(paper);
+  trash_cans.emplace_back(glass);
+  trash_cans.emplace_back(plastic);
+  trash_cans.emplace_back(organic);
 }

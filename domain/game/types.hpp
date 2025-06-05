@@ -1,5 +1,13 @@
 #pragma once
 
+enum Category{
+  PAPER,
+  PLASTIC,
+  GLASS,
+  METAL,
+  ORGANIC
+};
+
 struct Point {
   int x, y;
 

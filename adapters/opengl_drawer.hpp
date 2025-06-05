@@ -10,5 +10,6 @@ class OpenGLDrawer : public IDrawer {
     void drawHallway(const Hallway& hallway) const override;
     void drawMap(const Map& map) const override;
     void drawPlayer(const Player& player) const override;
+    void drawTrashCan(const TrashCan& trash_can) const override;
     void setTileSize(int tile_size) override;
 };
