@@ -7,6 +7,9 @@
 #include <functional>
 #include <vector>
 
+typedef std::vector<std::vector<bool>> WalkableMap;
+typedef std::vector<std::reference_wrapper<Player>> PlayerList;
+
 class Map : public Drawable{
   public:
     explicit Map(
@@ -17,25 +20,18 @@ class Map : public Drawable{
       int hallway_size
     );
 
-    const std::vector<std::vector<bool>>& getWalkableMap() const;
+    WalkableMap& getWalkableMap();
     const std::vector<Room>& getRooms() const;
     const std::vector<Hallway>& getHallways() const;
     const std::vector<TrashCan>& getTrashCans() const;
     void draw(const IDrawer& drawer) const override;
-    int getWidth() const;
-    int getHeight() const;
-    void spawnInWalkableArea(Drawable& element);
-    void addPlayers(std::vector<std::reference_wrapper<Player>>& players);
-    void spawnTrashCans();
-    void spawnTrashBags();
 
   private:
     std::vector<Room> rooms = {};
     std::vector<Hallway> hallways = {};
-    std::vector<std::vector<bool>> walkable_map = {};
-    std::vector<TrashCan> trash_cans = {};
+    WalkableMap walkable_map = {};
 
-    std::vector<std::vector<bool>> generateWalkableMap(
+    WalkableMap generateWalkableMap(
         int width, 
         int height, 
         const std::vector<Room>& rooms, 

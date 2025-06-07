@@ -1,6 +1,7 @@
 #pragma once
 
 #include "controllable.hpp"
+#include <functional>
 #include <vector>
 
 class Control;
@@ -9,12 +10,12 @@ class IController{
   public:
     virtual ~IController() = default;
 
-    IController(
-        Controllable& element
-    ) : element(element) {};
-   
-    virtual void bindKeys(std::vector<Control> controls) = 0;
+    IController(){}
 
+    void addElement(const Controllable& element){
+      elements.emplace_back(element);
+    }
+   
   protected:
-    Controllable& element;
+    std::vector<std::reference_wrapper<const Controllable>> elements;
 };

@@ -1,12 +1,8 @@
 #include "map.hpp"
 #include "bsp.hpp"
 #include "hallway.hpp"
-#include "../player.hpp"
-#include "../trash_can.hpp"
 #include <cstdio>
-#include <functional>
 #include <vector>
-#include <chrono>
 
 Map::Map(
   Area area, 
@@ -33,8 +29,6 @@ Map::Map(
   }
 
   walkable_map = generateWalkableMap(area.width, area.height, rooms, hallways);
-
-  spawnTrashCans();
 }
 
 void Map::draw(const IDrawer& drawer) const{
@@ -42,17 +36,21 @@ void Map::draw(const IDrawer& drawer) const{
 };
 
 std::vector<std::vector<bool>> Map::generateWalkableMap(
-  int width, 
-  int height, 
+  int map_width, 
+  int map_height, 
   const std::vector<Room>& rooms, 
   const std::vector<Hallway>& hallways
 ) {
   std::vector<std::vector<bool>> walkable = std::vector(height, std::vector(width, false));
 
   for (const Room& room : rooms) {
-    for (int x = room.coordinate.x; x < room.coordinate.x + room.width; ++x) {
-      for (int y = room.coordinate.y; y < room.coordinate.y + room.height; ++y) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+    Point room_coordinate = room.getCoordinate();
+    int room_width = room.getWidth();
+    int room_height = room.getHeight();
+
+    for (int x = room_coordinate.x; x < room_coordinate.x + room_width; ++x) {
+      for (int y = room_coordinate.y; y < room_coordinate.y + room_height; ++y) {
+        if (x >= 0 && x < map_width && y >= 0 && y < map_height) {
           walkable[y][x] = true;
         }
       }
@@ -60,20 +58,23 @@ std::vector<std::vector<bool>> Map::generateWalkableMap(
   }
 
   for (const Hallway& hallway : hallways) {
-    for (int x = hallway.coordinate.x; x < hallway.coordinate.x + hallway.width; x++) {
-      for (int y = hallway.coordinate.y; y < hallway.coordinate.y + hallway.height; y++) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+    Point hallway_coordinate = hallway.getCoordinate();
+    int hallway_width = hallway.getWidth();
+    int hallway_height = hallway.getHeight();
+
+    for (int x = hallway_coordinate.x; x < hallway_coordinate.x + hallway_width; x++) {
+      for (int y = hallway_coordinate.y; y < hallway_coordinate.y + hallway_height; y++) {
+        if (x >= 0 && x < map_width && y >= 0 && y < map_height) {
           walkable[y][x] = true;
         }
       }
     }
   }
 
-
   return walkable;
 }
 
-const std::vector<std::vector<bool>>& Map::getWalkableMap() const {
+WalkableMap& Map::getWalkableMap(){
   return walkable_map;
 }
 
@@ -83,109 +84,4 @@ const std::vector<Room>& Map::getRooms() const {
 
 const std::vector<Hallway>& Map::getHallways() const {
   return hallways;
-}
-
-const std::vector<TrashCan>& Map::getTrashCans() const {
-  return trash_cans;
-}
-
-int Map::getWidth() const {
-  return width;
-}
-
-int Map::getHeight() const {
-  return height;
-}
-
-void Map::spawnInWalkableArea(Drawable& element) {
-  static std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-
-  std::uniform_int_distribution<int> distribution_x(0, width - element.width);
-  std::uniform_int_distribution<int> distribution_y(0, height - element.height);
-
-  const int MAX_ATTEMPTS = 100;
-  int attempts = 0;
-  bool spawned = false;
-
-  while (attempts < MAX_ATTEMPTS && !spawned) {
-      int test_x = distribution_x(rng);
-      int test_y = distribution_y(rng);
-
-      bool area_is_walkable = true;
-
-      // Check if the entire element's area is walkable
-      for (int y_offset = 0; y_offset < element.height; y_offset++) {
-        for (int x_offset = 0; x_offset < element.width; x_offset++) {
-          int current_x = test_x + x_offset;
-          int current_y = test_y + y_offset;
-
-          if (current_x >= width || current_y >= height || current_x < 0 || current_y < 0) {
-            area_is_walkable = false;
-            break; 
-          }
-          
-          if (!walkable_map[current_y][current_x]) {
-            area_is_walkable = false;
-            break;
-          }
-        }
-
-          if (!area_is_walkable) break;
-      }
-
-      if (area_is_walkable) {
-        printf("Antiga coordenada x:%d e y:%d", element.coordinate.x, element.coordinate.y);
-          
-        element.coordinate.x = test_x;
-          element.coordinate.y = test_y;
-
-        printf("Nova coordenada x:%d e y:%d", element.coordinate.x, element.coordinate.y);
-
-          // If it's not a player, mark the area as non-walkable
-          bool is_player = (dynamic_cast<Player*>(&element) != nullptr);
-
-          if (!is_player) {
-              for (int y_offset = 0; y_offset < element.height; ++y_offset) {
-                  for (int x_offset = 0; x_offset < element.width; ++x_offset) {
-                      walkable_map[test_y + y_offset][test_x + x_offset] = false;
-                  }
-              }
-          }
-
-          spawned = true;
-      }
-      attempts++;
-  }
-
-  if (!spawned) {
-    printf(
-        "Warning: Could not find a walkable area for element after %d attempts.\n", MAX_ATTEMPTS
-    );
-  }
-}
-
-void Map::addPlayers(std::vector<std::reference_wrapper<Player>>& players){
-  for (Player& player : players) {
-    spawnInWalkableArea(player);
-  }
-}
-
-void Map::spawnTrashCans(){
-  TrashCan metal = TrashCan{{0, 0}, 10, 10, METAL};
-  TrashCan paper = TrashCan{{0, 0}, 10, 10, PAPER};
-  TrashCan glass = TrashCan{{0, 0}, 10, 10, GLASS};
-  TrashCan plastic = TrashCan{{0, 0}, 10, 10, PLASTIC};
-  TrashCan organic = TrashCan{{0, 0}, 10, 10, ORGANIC};
-
-  spawnInWalkableArea(metal);
-  spawnInWalkableArea(paper);
-  spawnInWalkableArea(glass);
-  spawnInWalkableArea(plastic);
-  spawnInWalkableArea(organic);
-
-  trash_cans.emplace_back(metal);
-  trash_cans.emplace_back(paper);
-  trash_cans.emplace_back(glass);
-  trash_cans.emplace_back(plastic);
-  trash_cans.emplace_back(organic);
 }

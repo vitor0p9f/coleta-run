@@ -9,10 +9,10 @@
 OpenGLDrawer::OpenGLDrawer(){};
 
 void OpenGLDrawer::drawRoom(const Room& room) const {
-  int x = room.coordinate.x * tile_size;
-  int y = room.coordinate.y * tile_size;
-  int width = room.width * tile_size; 
-  int height = room.height * tile_size;
+  int x = room.getCoordinate().x * tile_size;
+  int y = room.getCoordinate().y * tile_size;
+  int width = room.getWidth() * tile_size; 
+  int height = room.getHeight() * tile_size;
 
   glBegin(GL_QUADS);
     glColor3f(0.0f, 0.0f, 0.0f); // RBG: black
@@ -25,10 +25,10 @@ void OpenGLDrawer::drawRoom(const Room& room) const {
 }
 
 void OpenGLDrawer::drawHallway(const Hallway& hallway) const {
-  int x = hallway.coordinate.x * tile_size;
-  int y = hallway.coordinate.y * tile_size;
-  int width = hallway.width * tile_size; 
-  int height = hallway.height * tile_size;
+  int x = hallway.getCoordinate().x * tile_size;
+  int y = hallway.getCoordinate().y * tile_size;
+  int width = hallway.getWidth() * tile_size; 
+  int height = hallway.getHeight() * tile_size;
 
   glBegin(GL_QUADS);
     glColor3f(0.0f, 0.0f, 0.0f); // RGB: black
@@ -41,10 +41,10 @@ void OpenGLDrawer::drawHallway(const Hallway& hallway) const {
 }
 
 void OpenGLDrawer::drawTrashCan(const TrashCan& trash_can) const {
-  int x = trash_can.coordinate.x * tile_size;
-  int y = trash_can.coordinate.y * tile_size;
-  int width = trash_can.width * tile_size; 
-  int height = trash_can.height * tile_size;
+  int x = trash_can.getCoordinate().x * tile_size;
+  int y = trash_can.getCoordinate().y * tile_size;
+  int width = trash_can.getWidth() * tile_size; 
+  int height = trash_can.getHeight() * tile_size;
 
   std::vector<float> color;
 
@@ -83,7 +83,6 @@ void OpenGLDrawer::drawTrashCan(const TrashCan& trash_can) const {
 void OpenGLDrawer::drawMap(const Map& map) const {
   std::vector<Room> rooms = map.getRooms();
   std::vector<Hallway> hallways = map.getHallways();
-  std::vector<TrashCan> trash_cans = map.getTrashCans();
 
   for(const Room& room : rooms){
       room.draw(*this);
@@ -92,10 +91,6 @@ void OpenGLDrawer::drawMap(const Map& map) const {
   for(const Hallway& hallway : hallways){
     hallway.draw(*this);
   }
-
-  for (const TrashCan& trash_can : trash_cans) {
-    trash_can.draw(*this); 
-  }
 }
 
 void OpenGLDrawer::setTileSize(int tile_size){
@@ -103,10 +98,10 @@ void OpenGLDrawer::setTileSize(int tile_size){
 }
 
 void OpenGLDrawer::drawPlayer(const Player& player) const {
-  int x = player.coordinate.x * tile_size;
-  int y = player.coordinate.y * tile_size;
-  int width = player.width * tile_size; 
-  int height = player.height * tile_size;
+  int x = player.getCoordinate().x * tile_size;
+  int y = player.getCoordinate().y * tile_size;
+  int width = player.getWidth() * tile_size; 
+  int height = player.getHeight() * tile_size;
 
   glBegin(GL_QUADS);
     glColor3f(0.8f, 0.5f, 0.3f);

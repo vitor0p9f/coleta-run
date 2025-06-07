@@ -2,21 +2,21 @@
 
 #include "../interfaces/drawable.hpp"
 #include "../interfaces/controllable.hpp"
+#include "map/map.hpp"
 #include "types.hpp"
 #include <cstdio>
-#include <vector>
 
 struct Player: public Drawable, public Controllable {
   int step_size = 2;
-  const std::vector<std::vector<bool>>& walkable_map;
+  const WalkableMap& walkable_map;
 
   Player();
 
   Player(
       Point coordinate, 
       int width, 
-      int height, 
-      const std::vector<std::vector<bool>>& walkable_map
+      int height,
+      const WalkableMap& walkable_map
   ) : Drawable(coordinate, width, height), walkable_map(walkable_map){}
 
   void draw(const IDrawer& drawer) const override {
