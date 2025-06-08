@@ -4,13 +4,13 @@
 #include "../interfaces/controllable.hpp"
 #include "map/map.hpp"
 #include "types.hpp"
-#include <cstdio>
+#include "trash_bag.hpp"
+#include <optional>
 
 struct Player: public Drawable, public Controllable {
   int step_size = 2;
   const WalkableMap& walkable_map;
-
-  Player();
+  std::optional<TrashBag> carried_bag;
 
   Player(
       Point coordinate, 
@@ -21,6 +21,10 @@ struct Player: public Drawable, public Controllable {
 
   void draw(const IDrawer& drawer) const override {
     drawer.drawPlayer(*this);
+
+    if (carried_bag) {
+      drawer.drawTrashBag(*carried_bag);
+    }
   }
 
   virtual void setStepSize(int step_size) override {
@@ -63,6 +67,22 @@ struct Player: public Drawable, public Controllable {
     if (can_move) {
       coordinate.x = target_x;
       coordinate.y = target_y;
+
+      if (carried_bag) {
+          carried_bag->setCoordinate(coordinate);
+      }
     }
+  }
+
+  void attachBag(const TrashBag& bag) {
+    carried_bag = bag;
+
+    if (carried_bag) {
+        carried_bag->setCoordinate(coordinate);
+    }
+  }
+
+  void detachBag() {
+      carried_bag.reset();
   }
 };

@@ -62,7 +62,7 @@ void display(){
 
 void updateGame(){
   opengl_controller.processInput();
-  game.spawnTrashBags();
+  game.update();
 
   glutPostRedisplay();
 }

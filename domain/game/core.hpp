@@ -40,11 +40,10 @@ class Game {
       return map;
     }
 
-    void run();
-    
     void init();
 
-    void spawnTrashBags();
+    
+    void update();
 
   private:
     const IDrawer& drawer;
@@ -66,8 +65,12 @@ class Game {
     Player player_2 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
     std::vector<TrashBag> trash_bags = {};
     int max_trash_bags = 30;
-    int spawn_interval_ms = 5000;
+    int spawn_interval_ms = 10000;
     std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
 
     void spawnElement(Drawable& element, Map& map);
+    void spawnTrashBags();
+    void handleCollisions();
+    void removeTrashBag(TrashBag* bag_to_remove);
+    bool isColliding(const Drawable& obj1, const Drawable& obj2);
 };
