@@ -1,10 +1,12 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
+#include <cmath>
 #include <vector>
 #include "opengl_drawer.hpp"
 #include "../domain/game/map/map.hpp"
 #include "../domain/game/player.hpp"
 #include "../domain/game/trash_can.hpp"
+#include "../domain/game/trash_bag.hpp"
 
 OpenGLDrawer::OpenGLDrawer(){};
 
@@ -111,4 +113,47 @@ void OpenGLDrawer::drawPlayer(const Player& player) const {
     glVertex2i(x + width, y + height);
     glVertex2i(x, y + height);
   glEnd();
+}
+
+void OpenGLDrawer::drawTrashBag(const TrashBag& trash_bag) const {
+    int center_x = (trash_bag.getCoordinate().x * tile_size) + (trash_bag.getWidth() * tile_size / 2);
+    int center_y = (trash_bag.getCoordinate().y * tile_size) + (trash_bag.getHeight() * tile_size / 2);
+    float radius = (float)std::min(trash_bag.getWidth(), trash_bag.getHeight()) * tile_size / 2.0f;
+
+    std::vector<float> color;
+
+    switch (trash_bag.category) { // Assumindo que TrashBag tem um membro 'type'
+        case PAPER:
+            color = {0.0f, 0.0f, 1.0f}; // Azul
+            break;
+        case GLASS:
+            color = {0.0f, 1.0f, 0.0f}; // Verde
+            break;
+        case PLASTIC:
+            color = {1.0f, 0.0f, 0.0f}; // Vermelho
+            break;
+        case METAL:
+            color = {1.0f, 1.0f, 0.0f}; // Amarelo
+            break;
+        case ORGANIC:
+            color = {0.58f, 0.29f, 0.0f}; // Marrom (corrigido 1.4, 0.6, 0.2 para 0-1 range)
+            break;
+        default:
+            color = {0.5f, 0.5f, 0.5f}; // Cinza padrão
+            break;
+    }
+
+    glColor3f(color[0], color[1], color[2]);
+
+    glBegin(GL_TRIANGLE_FAN);
+        glVertex2i(center_x, center_y);
+
+        const int NUM_SEGMENTS = 30; 
+        for (int i = 0; i <= NUM_SEGMENTS; ++i) {
+            float angle = 2.0f * M_PI * (float)i / (float)NUM_SEGMENTS;
+            int x = center_x + static_cast<int>(radius * std::cos(angle));
+            int y = center_y + static_cast<int>(radius * std::sin(angle));
+            glVertex2i(x, y);
+        }
+    glEnd();
 }

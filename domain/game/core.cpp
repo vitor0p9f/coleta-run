@@ -1,6 +1,8 @@
 #include "core.hpp"
 #include "map/map.hpp"
+#include "trash_bag.hpp"
 #include "trash_can.hpp"
+#include "types.hpp"
 #include <random>
 #include <chrono>
 #include <vector>
@@ -100,4 +102,38 @@ void Game::draw(){
 
   player_1.draw(drawer);
   player_2.draw(drawer);
+
+  for (const TrashBag& trash_bag : trash_bags) {
+    trash_bag.draw(drawer);
+  }
+}
+
+void Game::spawnTrashBags(){
+  if (trash_bags.size() >= max_trash_bags) {
+    return;
+  }
+
+  auto current_time = std::chrono::high_resolution_clock::now();
+  long long time_since_last_spawn_ms = 
+      std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_spawn_time).count();
+
+  if (time_since_last_spawn_ms < spawn_interval_ms) {
+      return;
+  }
+
+  static std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+
+  const int NUM_CATEGORIES = ORGANIC + 1; 
+
+  std::uniform_int_distribution<int> category_dist(0, NUM_CATEGORIES - 1);
+
+  Category random_category = static_cast<Category>(category_dist(rng));
+
+  TrashBag new_bag({0,0}, 10, 10, random_category);
+
+  spawnElement(new_bag, map); 
+
+  trash_bags.emplace_back(new_bag);
+  
+  last_spawn_time = current_time;
 }

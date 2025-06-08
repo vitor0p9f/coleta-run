@@ -5,6 +5,8 @@
 #include "../interfaces/drawable.hpp"
 #include "map/map.hpp"
 #include "player.hpp"
+#include "trash_bag.hpp"
+#include <chrono>
 #include <vector>
 
 const int PARTITION_WIDTH = 180;
@@ -42,6 +44,8 @@ class Game {
     
     void init();
 
+    void spawnTrashBags();
+
   private:
     const IDrawer& drawer;
     IController& controller;
@@ -60,6 +64,10 @@ class Game {
     );
     Player player_1 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
     Player player_2 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
+    std::vector<TrashBag> trash_bags = {};
+    int max_trash_bags = 30;
+    int spawn_interval_ms = 5000;
+    std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
 
     void spawnElement(Drawable& element, Map& map);
 };
