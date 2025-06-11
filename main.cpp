@@ -18,6 +18,10 @@ OpenGLDrawer opengl_drawer;
 OpenGLController opengl_controller;
 Game game = Game(opengl_drawer,opengl_controller);
 
+const int UPPER_VIEWPORT_HEIGHT = WINDOW_HEIGHT - static_cast<int>(WINDOW_HEIGHT * WINDOW_FRACTION);
+const int TIMER_CENTER_X = WINDOW_WIDTH / 2;
+const int TIMER_CENTER_Y = UPPER_VIEWPORT_HEIGHT / 2;
+
 const int WORLD_WIDTH = game.getMap().getWidth() * TILE_SIZE;
 const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
 
@@ -30,19 +34,22 @@ void display(){
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  gluOrtho2D(0, WINDOW_WIDTH, WINDOW_HEIGHT * WINDOW_FRACTION, WINDOW_HEIGHT - WINDOW_HEIGHT * WINDOW_FRACTION);
+  gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT - int(WINDOW_HEIGHT * WINDOW_FRACTION));
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  glColor3f(0.5f, 1.0f, 0.5f);
+  //glColor3f(0.5f, 1.0f, 0.5f);
 
-  glBegin(GL_QUADS);
-      glVertex2f(0, 0);
-      glVertex2f(WINDOW_WIDTH, 0);
-      glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-      glVertex2f(0, WINDOW_HEIGHT);
-  glEnd();
+  //glBegin(GL_QUADS);
+      //glVertex2f(0, 0);
+      //glVertex2f(WINDOW_WIDTH, 0);
+      //glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+      //glVertex2f(0, WINDOW_HEIGHT);
+  //glEnd();
+  //
+
+  game.getTimer().draw(opengl_drawer);
 
   // Inferior viewport
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT * WINDOW_FRACTION);
@@ -61,6 +68,7 @@ void display(){
 }
 
 void updateGame(){
+  game.getTimer().update();
   opengl_controller.processInput();
   game.update();
 
@@ -90,6 +98,8 @@ int main (int argc, char *argv[]) {
       Control{GLUT_KEY_LEFT, LEFT, true},
       Control{GLUT_KEY_RIGHT, RIGHT, true},
   });
+
+  game.getTimer().setCoordinate(Point{TIMER_CENTER_X, TIMER_CENTER_Y});
 
   opengl_drawer.setTileSize(TILE_SIZE);
 

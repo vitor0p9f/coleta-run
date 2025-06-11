@@ -1,5 +1,6 @@
 #include "core.hpp"
 #include "map/map.hpp"
+#include "timer.hpp"
 #include "trash_bag.hpp"
 #include "trash_can.hpp"
 #include "types.hpp"
@@ -150,6 +151,13 @@ bool Game::isColliding(const Drawable& obj1, const Drawable& obj2) {
 }
 
 void Game::update(){
+  game_timer.update();
+
+  if (game_timer.isFinished()) {
+    printf("Time's up! Game Over.\n");
+    return; // Stop processing updates if the game is over
+  }
+
   spawnTrashBags();
   handleCollisions();
 }

@@ -10,6 +10,7 @@ SOURCES = main.cpp \
 					domain/game/map/bsp.cpp \
 					domain/game/map/map.cpp \
 					domain/game/core.cpp \
+					domain/game/timer.cpp \
 					adapters/opengl_drawer.cpp \
 					adapters/opengl_controller.cpp
 

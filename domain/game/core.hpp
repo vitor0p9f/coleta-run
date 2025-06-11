@@ -5,6 +5,7 @@
 #include "../interfaces/drawable.hpp"
 #include "map/map.hpp"
 #include "player.hpp"
+#include "timer.hpp"
 #include "trash_bag.hpp"
 #include <chrono>
 #include <vector>
@@ -18,6 +19,8 @@ const int MAP_WIDTH = 600;
 const int MAP_HEIGHT = 600;
 
 const int PLAYER_SIZE = 10;
+
+const int TIME_IN_SECONDS = 30;
 
 class Game {
   public:
@@ -40,6 +43,10 @@ class Game {
       return map;
     }
 
+    Timer& getTimer() {
+      return game_timer;
+    }
+
     void init();
 
     
@@ -47,7 +54,9 @@ class Game {
 
   private:
     const IDrawer& drawer;
+    
     IController& controller;
+    
     std::vector<TrashCan> trash_cans = {
       TrashCan{Point{0, 0}, 10, 10, METAL},
       TrashCan{Point{0, 0}, 10, 10, PAPER},
@@ -55,18 +64,23 @@ class Game {
       TrashCan{Point{0, 0}, 10, 10, PLASTIC},
       TrashCan{Point{0, 0}, 10, 10, ORGANIC}
     };
+    
     Map map = Map(Area{Point{0,0}, MAP_WIDTH, MAP_HEIGHT}, 
       PARTITION_WIDTH, 
       PARTITION_HEIGHT, 
       ROOM_MARGIN, 
       HALLWAY_SIZE
     );
+    
     Player player_1 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
     Player player_2 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
+    
     std::vector<TrashBag> trash_bags = {};
     int max_trash_bags = 30;
     int spawn_interval_ms = 10000;
     std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
+    
+    Timer game_timer = Timer(Point{0, 0}, 10, 10, TIME_IN_SECONDS);
 
     void spawnElement(Drawable& element, Map& map);
     void spawnTrashBags();

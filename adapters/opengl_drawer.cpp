@@ -1,12 +1,14 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <cmath>
+#include <iostream>
 #include <vector>
 #include "opengl_drawer.hpp"
 #include "../domain/game/map/map.hpp"
 #include "../domain/game/player.hpp"
 #include "../domain/game/trash_can.hpp"
 #include "../domain/game/trash_bag.hpp"
+#include "../domain/game/timer.hpp"
 
 OpenGLDrawer::OpenGLDrawer(){};
 
@@ -156,4 +158,27 @@ void OpenGLDrawer::drawTrashBag(const TrashBag& trash_bag) const {
             glVertex2i(x, y);
         }
     glEnd();
+}
+
+void OpenGLDrawer::drawTimer(const Timer& timer) const {
+    std::string time_str = timer.getFormattedTime();
+    Point coord = timer.getCoordinate(); // Canto superior esquerdo da caixa delimitadora do timer
+    int width_px = timer.getWidth();     // Largura da caixa delimitadora
+
+    void* font = GLUT_BITMAP_TIMES_ROMAN_24; // Esta fonte tem aproximadamente 24 pixels de altura
+
+    int text_width = 0;
+    for (char c : time_str) {
+        text_width += glutBitmapWidth(font, c);
+    }
+
+    int text_draw_x = coord.x + (width_px - text_width) / 2;
+
+    glColor3f(0.0f, 0.0f, 0.0f); // Texto preto
+
+    glRasterPos2i(text_draw_x, 0);
+
+    for (char c : time_str) {
+        glutBitmapCharacter(font, c);
+    }
 }
