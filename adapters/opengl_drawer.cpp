@@ -1,7 +1,9 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <cmath>
+#include <cstdio>
 #include <iostream>
+#include <ostream>
 #include <vector>
 #include "opengl_drawer.hpp"
 #include "../domain/game/map/map.hpp"
@@ -182,3 +184,26 @@ void OpenGLDrawer::drawTimer(const Timer& timer) const {
         glutBitmapCharacter(font, c);
     }
 }
+
+void OpenGLDrawer::drawPlayerScore(const Player& player, Point position, int width, int height) const {
+    std::string score_str = "P" + std::to_string(player.id) + " SCORE: " + std::to_string(player.getScore());
+
+    void* font = GLUT_BITMAP_8_BY_13;
+
+    int text_width = 0;
+
+    for (char c : score_str) {
+        text_width += glutBitmapWidth(font, c);
+    }
+
+    int text_draw_x = position.x + (width - text_width) / 2;
+
+    glColor3f(0.0f, 0.0f, 0.0f); // Cor do texto: preto
+
+    glRasterPos2i(text_draw_x, 0);
+
+    for (char c : score_str) {
+        glutBitmapCharacter(font, c);
+    }
+}
+

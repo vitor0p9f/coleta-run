@@ -4,6 +4,7 @@
 #include "trash_bag.hpp"
 #include "trash_can.hpp"
 #include "types.hpp"
+#include <cstdio>
 #include <optional>
 #include <random>
 #include <chrono>
@@ -155,6 +156,18 @@ void Game::update(){
 
   if (game_timer.isFinished()) {
     printf("Time's up! Game Over.\n");
+
+    int player_1_points = player_1.getScore();
+    int player_2_points = player_2.getScore();
+
+    if (player_1_points > player_2_points){
+      printf("Player 1 ganhou!\n");
+    }else if (player_2_points > player_1_points){
+      printf("Player 2 ganhou!\n");
+    }else {
+      printf("Empate!\n");
+    }
+
     return; // Stop processing updates if the game is over
   }
 
@@ -178,6 +191,9 @@ void Game::handleCollisions() {
         if (isColliding(*current_player, current_can)) {
           if (current_player->carried_bag->category == current_can.category) {
             current_player->detachBag();
+
+            current_player->increaseScore(2);
+
             last_action_time = std::chrono::high_resolution_clock::now();
             break;
           }

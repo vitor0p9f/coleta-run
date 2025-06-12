@@ -50,6 +50,8 @@ void display(){
   //
 
   game.getTimer().draw(opengl_drawer);
+  opengl_drawer.drawPlayerScore(game.getPlayer1(), Point{0,0}, 100, 60);
+  opengl_drawer.drawPlayerScore(game.getPlayer2(), Point{WINDOW_WIDTH - 100,0}, 100, 60);
 
   // Inferior viewport
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT * WINDOW_FRACTION);

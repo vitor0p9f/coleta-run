@@ -11,13 +11,16 @@ struct Player: public Drawable, public Controllable {
   int step_size = 2;
   const WalkableMap& walkable_map;
   std::optional<TrashBag> carried_bag;
+  int score = 0;
+  int id;
 
   Player(
       Point coordinate, 
       int width, 
       int height,
+      int id,
       const WalkableMap& walkable_map
-  ) : Drawable(coordinate, width, height), walkable_map(walkable_map){}
+  ) : Drawable(coordinate, width, height), walkable_map(walkable_map), id(id){}
 
   void draw(const IDrawer& drawer) const override {
     drawer.drawPlayer(*this);
@@ -84,5 +87,13 @@ struct Player: public Drawable, public Controllable {
 
   void detachBag() {
       carried_bag.reset();
+  }
+
+  void increaseScore(int points){
+    score += points;
+  }
+
+  int getScore() const {
+    return score;
   }
 };

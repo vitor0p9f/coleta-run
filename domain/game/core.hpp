@@ -20,7 +20,7 @@ const int MAP_HEIGHT = 600;
 
 const int PLAYER_SIZE = 10;
 
-const int TIME_IN_SECONDS = 30;
+const int TIME_IN_SECONDS = 120;
 
 class Game {
   public:
@@ -72,8 +72,8 @@ class Game {
       HALLWAY_SIZE
     );
     
-    Player player_1 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
-    Player player_2 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, map.getWalkableMap()};
+    Player player_1 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, 1, map.getWalkableMap()};
+    Player player_2 = Player{Point{0,0}, PLAYER_SIZE, PLAYER_SIZE, 2, map.getWalkableMap()};
     
     std::vector<TrashBag> trash_bags = {};
     int max_trash_bags = 30;

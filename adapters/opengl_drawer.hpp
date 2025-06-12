@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../domain/interfaces/drawer.hpp"
+#include "../domain/interfaces/drawable.hpp"
 
 class OpenGLDrawer : public IDrawer {
   public:
@@ -13,5 +14,6 @@ class OpenGLDrawer : public IDrawer {
     void drawTrashCan(const TrashCan& trash_can) const override;
     void drawTrashBag(const TrashBag& trash_bag) const override;
     void drawTimer(const Timer& timer) const override;
+    void drawPlayerScore(const Player& player, Point position, int width, int height) const;
     void setTileSize(int tile_size) override;
 };
