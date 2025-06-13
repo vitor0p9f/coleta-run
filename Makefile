@@ -2,9 +2,9 @@ TARGET = executable
 
 COMPILER = g++
 
-FLAGS = -Wall -g
+FLAGS = -Wall -g -std=c++17 -I./include -I./domain/game
 
-LIBS = -lGL -lGLU -lglut
+LIBS = -L./lib/x64 -lfreeglut -lopengl32 -lglu32
 
 SOURCES = main.cpp \
 					domain/game/map/bsp.cpp \
@@ -12,6 +12,7 @@ SOURCES = main.cpp \
 					domain/game/core.cpp \
 					domain/game/timer.cpp \
 					adapters/opengl_drawer.cpp \
+					adapters/game_state_controller.cpp\
 					adapters/opengl_controller.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)

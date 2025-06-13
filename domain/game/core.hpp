@@ -52,6 +52,8 @@ class Game {
     
     void update();
 
+    void restart();
+
   private:
     const IDrawer& drawer;
     
@@ -87,4 +89,5 @@ class Game {
     void handleCollisions();
     void removeTrashBag(TrashBag* bag_to_remove);
     bool isColliding(const Drawable& obj1, const Drawable& obj2);
-};
+    
+    };

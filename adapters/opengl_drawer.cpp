@@ -1,5 +1,6 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstdio>
 #include <iostream>

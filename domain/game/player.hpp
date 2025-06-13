@@ -96,4 +96,8 @@ struct Player: public Drawable, public Controllable {
   int getScore() const {
     return score;
   }
+
+  void resetScore() {
+    score = 0;
+  }
 };

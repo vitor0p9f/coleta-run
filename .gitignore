@@ -1,2 +1,8 @@
 **/**/*.o
-executable
+executable.exe
+bin
+include
+lib
+freeglut.dll
+launch.json
+tasks.json

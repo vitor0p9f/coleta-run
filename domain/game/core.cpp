@@ -217,3 +217,24 @@ void Game::handleCollisions() {
     }
   }
 }
+
+void Game::restart() {
+    trash_bags.clear();
+    trash_cans.clear();
+
+    player_1.detachBag();
+    player_2.detachBag();
+
+    player_1.setCoordinate({0, 0});
+    player_2.setCoordinate({0, 0});
+
+    player_1.resetScore();
+    player_2.resetScore();
+
+    // Reset do mapa se necessário
+    // map.reset(); // descomente se existir função de reset do mapa
+
+    this->init();
+
+    last_spawn_time = std::chrono::high_resolution_clock::now();
+}
