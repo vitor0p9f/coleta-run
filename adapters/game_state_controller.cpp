@@ -12,7 +12,7 @@
 #include "opengl_controller.hpp"
 #include "../domain/interfaces/menu.hpp"
 
-
+int splashStartTime = 0;
 const int WINDOW_WIDTH = 1366;
 const int WINDOW_HEIGHT = 688;
 const float WINDOW_FRACTION = 0.95;
@@ -53,8 +53,7 @@ void drawSplash() {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
     glColor3f(1.0, 1.0, 1.0); 
     drawText("Bem vindo ao Coleta Run!", WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2);
-    drawText("Pressione qualquer tecla para continuar", WINDOW_WIDTH/2 - 170, WINDOW_HEIGHT/2 - 40);
-
+    
     glutSwapBuffers();
 }
 
@@ -239,12 +238,27 @@ void display() {
     }
 }
 
-void updateGame(){
-  game.getTimer().update();
-  opengl_controller.processInput();
-  game.update();
+void updateGame() {
+    game.getTimer().update();
 
-  glutPostRedisplay();
+    // Executa a Splash por 3s
+    if (gameState == GameState::SPLASH) {
+        int currentTime = glutGet(GLUT_ELAPSED_TIME);
+        if (splashStartTime == 0) splashStartTime = currentTime; 
+
+        if (currentTime - splashStartTime > 3000) { 
+            gameState = GameState::MENU;
+        }
+
+        glutPostRedisplay();
+        return; 
+    }
+
+    // Apos Splash, segue o jogo normalmente
+    opengl_controller.processInput();
+    game.update();
+
+    glutPostRedisplay();
 }
 
 void keyboardDown(unsigned char key, int x, int y) {
@@ -252,7 +266,7 @@ void keyboardDown(unsigned char key, int x, int y) {
 
     switch (gameState) {
         case GameState::SPLASH:
-            gameState = GameState::MENU;
+            return;
             break;
 
         case GameState::MENU:
@@ -267,7 +281,7 @@ void keyboardDown(unsigned char key, int x, int y) {
         case GameState::START_MENU:
             if (key == 13) {
                 int sel = startMenu.getSelectedOption();
-                if (sel == 0) gameState = GameState::MENU; // 1 player não feito
+                if (sel == 1) gameState = GameState::MENU; // 1 player não feito
                 else gameState = GameState::PLAYING;
             }
             break;

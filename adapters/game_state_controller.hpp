@@ -2,6 +2,7 @@
 
 #include "types.hpp"
 
+extern int splashStartTime;
 
 void display();
 void idle();

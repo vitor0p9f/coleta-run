@@ -20,7 +20,7 @@ const int TILE_SIZE = 8;
 OpenGLDrawer opengl_drawer;
 OpenGLController opengl_controller;
 Game game = Game(opengl_drawer,opengl_controller);
-GameState gameState = GameState::PLAYING;
+GameState gameState = GameState::SPLASH;
 Menu mainMenu({"Iniciar", "Instruções", "Sair"});
 Menu startMenu({"1 Player", "2 Players"});
 Menu pauseMenu({"Reiniciar", "Instruções", "Sair"});
@@ -36,7 +36,7 @@ const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
 //void keyboard(unsigned char key, int x, int y);
 void key(unsigned char key, int x, int y) {
     if (gameState == GameState::MENU && key == 13) { // ENTER
-        gameState = GameState::PLAYING;
+        gameState = GameState::SPLASH;
         glutPostRedisplay();
     } else if (gameState == GameState::GAME_OVER && (key == 'r' || key == 'R')) {
         game.restart();
