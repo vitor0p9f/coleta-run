@@ -8,6 +8,7 @@
 #include <GL/glu.h>
 #include <cstdio>
 #include <vector>
+#include <string>
 #include "player.hpp"
 #include "opengl_controller.hpp"
 #include "../domain/interfaces/menu.hpp"
@@ -37,6 +38,27 @@ void drawText(const char* text, int x, int y) {
     glRasterPos2i(x, y);
     for (const char* c = text; *c != '\0'; c++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+}
+
+void drawMenuOptions(const std::vector<std::string>& options, int selectedOption, int startX, int startY, int spacing) {
+    for (int i = 0; i < static_cast<int>(options.size()); i++) {
+        int x = startX;
+        int y = startY + i * spacing;
+
+        // Desenha contorno amarelo se estiver selecionado
+        if (selectedOption == i) {
+            glColor3f(1.0, 1.0, 0.0); // amarelo
+            glBegin(GL_LINE_LOOP);
+                glVertex2f(x - 10, y - 5);
+                glVertex2f(x + 200, y - 5);
+                glVertex2f(x + 200, y + 20);
+                glVertex2f(x - 10, y + 20);
+            glEnd();
+            glColor3f(1.0, 1.0, 1.0); // volta a branco
+        }
+
+        drawText(options[i].c_str(), x, y);
     }
 }
 
@@ -70,8 +92,16 @@ void drawMainMenu() {
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
     glColor3f(1.0, 1.0, 1.0); 
-    drawText("COLETA RUN", 100, 300);
-    drawText("Pressione ENTER para comecar", 100, 250);
+
+    drawText("COLETA RUN", WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 + 80 );
+
+    std::vector<std::string> options = {"Iniciar", "Instrucoes", "Sair"};
+
+    int startY = WINDOW_HEIGHT/2 + 40; 
+    int spacing = -40;                 
+
+    drawMenuOptions(options, mainMenu.getSelectedOption(), WINDOW_WIDTH/2 - 100, startY, spacing);
+
     glutSwapBuffers();
 }
 
@@ -89,6 +119,12 @@ void drawStartMenu() {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
     glColor3f(1.0, 1.0, 1.0);
     drawText("Escolha o modo:", WINDOW_WIDTH/2 - 70, WINDOW_HEIGHT/2 + 80);
+    std::vector<std::string> options = {"1 Player", "2 Player","Voltar"};
+
+    int startY = WINDOW_HEIGHT/2 + 40; 
+    int spacing = -40;                 
+
+    drawMenuOptions(options, startMenu.getSelectedOption(), WINDOW_WIDTH/2 - 100, startY, spacing);
 
     glutSwapBuffers();
 }
@@ -164,7 +200,13 @@ void drawPauseMenu() {
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
     glColor3f(1.0, 1.0, 1.0);
-    drawText("Pausado", WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT/2 + 100);
+    drawText("Pausado", WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT/2 + 120);
+    std::vector<std::string> options = {"Continuar", "Reiniciar","Instrucoes","Sair"};
+
+    int startY = WINDOW_HEIGHT/2 + 80; 
+    int spacing = -40;                 
+
+    drawMenuOptions(options, pauseMenu.getSelectedOption(), WINDOW_WIDTH/2 - 100, startY, spacing);
 
     glutSwapBuffers();
 }
@@ -281,8 +323,9 @@ void keyboardDown(unsigned char key, int x, int y) {
         case GameState::START_MENU:
             if (key == 13) {
                 int sel = startMenu.getSelectedOption();
-                if (sel == 1) gameState = GameState::MENU; // 1 player não feito
-                else gameState = GameState::PLAYING;
+                if (sel == 0) gameState = GameState::PLAYING;
+                else if (sel == 1) gameState = GameState::PLAYING;
+                else if (sel == 2) gameState = GameState::MENU;
             }
             break;
 
@@ -298,8 +341,9 @@ void keyboardDown(unsigned char key, int x, int y) {
             if (key == 13) { // ENTER
                 int sel = pauseMenu.getSelectedOption();
                 if (sel == 0) gameState = GameState::PLAYING;       // Reiniciar
-                else if (sel == 1) gameState = GameState::INSTRUCTIONS;
-                else if (sel == 2) gameState = GameState::MENU;
+                else if (sel == 1) gameState = GameState::PLAYING;
+                else if (sel == 2) gameState = GameState::INSTRUCTIONS;
+                else if (sel == 3) gameState = GameState::MENU;
             } else if (key == 27) gameState = GameState::PLAYING;  // ESC resume
             break;
 

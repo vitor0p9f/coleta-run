@@ -22,8 +22,8 @@ OpenGLController opengl_controller;
 Game game = Game(opengl_drawer,opengl_controller);
 GameState gameState = GameState::SPLASH;
 Menu mainMenu({"Iniciar", "Instruções", "Sair"});
-Menu startMenu({"1 Player", "2 Players"});
-Menu pauseMenu({"Reiniciar", "Instruções", "Sair"});
+Menu startMenu({"1 Player", "2 Players", "Voltar"});
+Menu pauseMenu({"Continuar","Reiniciar", "Instruções", "Sair"});
 
 const int UPPER_VIEWPORT_HEIGHT = WINDOW_HEIGHT - static_cast<int>(WINDOW_HEIGHT * WINDOW_FRACTION);
 const int TIMER_CENTER_X = WINDOW_WIDTH / 2;
@@ -45,8 +45,8 @@ void key(unsigned char key, int x, int y) {
         exit(0);
     }
 }
-/*
-void display(){
+
+void play(){
   glClear(GL_COLOR_BUFFER_BIT);
 
   // Superior viewport
@@ -89,7 +89,7 @@ void display(){
 
   glutSwapBuffers();
 }
-*/
+
 void updateGame();
 
 int main (int argc, char *argv[]) {
@@ -122,7 +122,7 @@ int main (int argc, char *argv[]) {
 
   glutKeyboardFunc(keyboardDown);
   glutKeyboardUpFunc(OpenGLController::keyboardUp);
-  glutSpecialFunc(OpenGLController::specialKeysDown);
+  glutSpecialFunc(specialKeysDown);
   glutSpecialUpFunc(OpenGLController::specialKeysUp);
   
   glutDisplayFunc(display);
