@@ -1,4 +1,3 @@
-// game_state_controller.cpp
 #include <GL/freeglut.h>
 #include "types.hpp"
 #include "game_state_controller.hpp"
@@ -11,6 +10,8 @@
 #include <vector>
 #include "player.hpp"
 #include "opengl_controller.hpp"
+#include "../domain/interfaces/menu.hpp"
+
 
 const int WINDOW_WIDTH = 1366;
 const int WINDOW_HEIGHT = 688;
@@ -25,6 +26,9 @@ extern OpenGLDrawer opengl_drawer;
 extern OpenGLController opengl_controller;
 extern Game game;
 extern GameState gameState;
+extern Menu mainMenu;
+extern Menu startMenu;
+extern Menu pauseMenu;
 
 const int WORLD_WIDTH = game.getMap().getWidth() * TILE_SIZE;
 const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
@@ -235,7 +239,6 @@ void display() {
     }
 }
 
-
 void updateGame(){
   game.getTimer().update();
   opengl_controller.processInput();
@@ -244,3 +247,81 @@ void updateGame(){
   glutPostRedisplay();
 }
 
+void keyboardDown(unsigned char key, int x, int y) {
+    key = tolower(key);
+
+    switch (gameState) {
+        case GameState::SPLASH:
+            gameState = GameState::MENU;
+            break;
+
+        case GameState::MENU:
+            if (key == 13) { // ENTER
+                int selected = mainMenu.getSelectedOption();
+                if (selected == 0) gameState = GameState::START_MENU;
+                else if (selected == 1) gameState = GameState::INSTRUCTIONS;
+                else if (selected == 2) gameState = GameState::EXIT;
+            }
+            break;
+
+        case GameState::START_MENU:
+            if (key == 13) {
+                int sel = startMenu.getSelectedOption();
+                if (sel == 0) gameState = GameState::MENU; // 1 player não feito
+                else gameState = GameState::PLAYING;
+            }
+            break;
+
+        case GameState::INSTRUCTIONS:
+            if (key == 27) gameState = GameState::MENU; // ESC volta menu
+            break;
+
+        case GameState::PLAYING:
+            if (key == ' ') gameState = GameState::PAUSE_MENU;
+            break;
+
+        case GameState::PAUSE_MENU:
+            if (key == 13) { // ENTER
+                int sel = pauseMenu.getSelectedOption();
+                if (sel == 0) gameState = GameState::PLAYING;       // Reiniciar
+                else if (sel == 1) gameState = GameState::INSTRUCTIONS;
+                else if (sel == 2) gameState = GameState::MENU;
+            } else if (key == 27) gameState = GameState::PLAYING;  // ESC resume
+            break;
+
+        case GameState::WIN_SCREEN:
+            if (key == 'r') gameState = GameState::PLAYING;
+            else if (key == 27) gameState = GameState::MENU;
+            break;
+
+        case GameState::EXIT:
+            exit(0);
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void specialKeysDown(int key, int x, int y) {
+    switch (gameState) {
+        case GameState::MENU:
+            if (key == GLUT_KEY_UP) mainMenu.moveUp();
+            else if (key == GLUT_KEY_DOWN) mainMenu.moveDown();
+            break;
+
+        case GameState::START_MENU:
+            if (key == GLUT_KEY_UP) startMenu.moveUp();
+            else if (key == GLUT_KEY_DOWN) startMenu.moveDown();
+            break;
+
+        case GameState::PAUSE_MENU:
+            if (key == GLUT_KEY_UP) pauseMenu.moveUp();
+            else if (key == GLUT_KEY_DOWN) pauseMenu.moveDown();
+            break;
+
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}

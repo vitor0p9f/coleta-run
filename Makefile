@@ -11,6 +11,7 @@ SOURCES = main.cpp \
 					domain/game/map/map.cpp \
 					domain/game/core.cpp \
 					domain/game/timer.cpp \
+					domain/game/menu.cpp\
 					adapters/opengl_drawer.cpp \
 					adapters/game_state_controller.cpp\
 					adapters/opengl_controller.cpp
