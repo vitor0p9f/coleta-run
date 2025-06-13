@@ -9,8 +9,14 @@ enum Category{
 };
 
 enum class GameState{
+  SPLASH,
   MENU,
+  START_MENU,
+  INSTRUCTIONS,
+  PAUSE_MENU,
   PLAYING,
+  WIN_SCREEN,
+  EXIT,
   GAME_OVER
 };
 

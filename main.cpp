@@ -19,7 +19,7 @@ const int TILE_SIZE = 8;
 OpenGLDrawer opengl_drawer;
 OpenGLController opengl_controller;
 Game game = Game(opengl_drawer,opengl_controller);
-GameState gameState = GameState::MENU; // Você precisa definir o gameState em algum lugar
+GameState gameState = GameState::START_MENU;
 
 const int UPPER_VIEWPORT_HEIGHT = WINDOW_HEIGHT - static_cast<int>(WINDOW_HEIGHT * WINDOW_FRACTION);
 const int TIMER_CENTER_X = WINDOW_WIDTH / 2;
@@ -29,8 +29,6 @@ const int WORLD_WIDTH = game.getMap().getWidth() * TILE_SIZE;
 const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
 
 
-//void display();
-void idle();
 //void keyboard(unsigned char key, int x, int y);
 void key(unsigned char key, int x, int y) {
     if (gameState == GameState::MENU && key == 13) { // ENTER
@@ -96,9 +94,7 @@ int main (int argc, char *argv[]) {
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutCreateWindow("ColetaRun");
   
-  glClearColor(0, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glutSwapBuffers();
+  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
   game.init();
 
@@ -120,8 +116,7 @@ int main (int argc, char *argv[]) {
 
   opengl_drawer.setTileSize(TILE_SIZE);
 
-  glutKeyboardFunc(key);
- // glutKeyboardFunc(OpenGLController::keyboardDown);
+  glutKeyboardFunc(OpenGLController::keyboardDown);
   glutKeyboardUpFunc(OpenGLController::keyboardUp);
   glutSpecialFunc(OpenGLController::specialKeysDown);
   glutSpecialUpFunc(OpenGLController::specialKeysUp);
@@ -130,5 +125,5 @@ int main (int argc, char *argv[]) {
   glutIdleFunc(updateGame);
   glutMainLoop();
 
- return 0;
+  return 0;
 }

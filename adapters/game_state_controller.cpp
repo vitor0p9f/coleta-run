@@ -36,8 +36,26 @@ void drawText(const char* text, int x, int y) {
     }
 }
 
+void drawSplash() {
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0); 
+    drawText("Bem vindo ao Coleta Run!", WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2);
+    drawText("Pressione qualquer tecla para continuar", WINDOW_WIDTH/2 - 170, WINDOW_HEIGHT/2 - 40);
+
+    glutSwapBuffers();
+}
+
 void drawMainMenu() {
-    glClearColor(0.0, 0.0, 0.0, 1.0); // fundo preto
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
     glClear(GL_COLOR_BUFFER_BIT);
     
     glMatrixMode(GL_PROJECTION);
@@ -47,10 +65,28 @@ void drawMainMenu() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); // Configura viewport padrão (tela cheia)
-    glColor3f(1.0, 1.0, 1.0); // texto branco
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0); 
     drawText("COLETA RUN", 100, 300);
     drawText("Pressione ENTER para comecar", 100, 250);
+    glutSwapBuffers();
+}
+
+void drawStartMenu() {
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0);
+    drawText("Escolha o modo:", WINDOW_WIDTH/2 - 70, WINDOW_HEIGHT/2 + 80);
+
     glutSwapBuffers();
 }
 
@@ -91,6 +127,64 @@ void drawPlaying() {
         glutSwapBuffers();
 }
 
+void drawInstructions() {
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0);
+    drawText("Instruções do jogo:", 50, WINDOW_HEIGHT - 50);
+    drawText("- Use setas para mover", 50, WINDOW_HEIGHT - 80);
+    drawText("- Colete os itens para ganhar pontos", 50, WINDOW_HEIGHT - 110);
+    drawText("- Pressione ESC para voltar", 50, WINDOW_HEIGHT - 140);
+
+    glutSwapBuffers();
+}
+
+void drawPauseMenu() {
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0);
+    drawText("Pausado", WINDOW_WIDTH/2 - 30, WINDOW_HEIGHT/2 + 100);
+
+    glutSwapBuffers();
+}
+
+void drawWinScreen() {
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
+    glColor3f(1.0, 1.0, 1.0);
+    drawText("Parabéns! Você ganhou!", WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2);
+    drawText("Pressione R para reiniciar ou ESC para sair", WINDOW_WIDTH/2 - 170, WINDOW_HEIGHT/2 - 40);
+
+    glutSwapBuffers();
+}
+
 void drawGameOverScreen() {
     glClearColor(0.0, 0.0, 0.0, 1.0); // fundo preto
     glClear(GL_COLOR_BUFFER_BIT);
@@ -110,19 +204,34 @@ void drawGameOverScreen() {
 }
 
 void display() {
-    
     switch (gameState) {
-        case GameState::MENU:
-            drawMainMenu();
-            break;
-
-        case GameState::PLAYING:
-            drawPlaying();
-            break;
-
+        case GameState::SPLASH: 
+             drawSplash(); 
+             break;
+        case GameState::MENU: 
+             drawMainMenu(); 
+             break;
+        case GameState::START_MENU: 
+             drawStartMenu(); 
+             break;
+        case GameState::INSTRUCTIONS: 
+             drawInstructions(); 
+             break;
+        case GameState::PLAYING: 
+             drawPlaying(); 
+             break;
+        case GameState::PAUSE_MENU:
+             drawPauseMenu();
+             break;
+        case GameState::WIN_SCREEN: 
+             drawWinScreen(); 
+             break;
         case GameState::GAME_OVER:
             drawGameOverScreen();
             break;
+        case GameState::EXIT: 
+             exit(0); 
+             break;
     }
 }
 
@@ -135,15 +244,3 @@ void updateGame(){
   glutPostRedisplay();
 }
 
-/*
-void keyboard(unsigned char key, int x, int y) {
-    if (gameState == GameState::MENU && key == 13) { // ENTER
-        gameState = GameState::PLAYING;
-    } else if (gameState == GameState::GAME_OVER && (key == 'r' || key == 'R')) {
-        game.restart();
-        gameState = GameState::PLAYING;
-    } else if (key == 27) { // ESC
-        exit(0);
-    }
-}
-*/
