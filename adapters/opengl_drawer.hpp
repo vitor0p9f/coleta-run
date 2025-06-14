@@ -1,6 +1,8 @@
 #pragma once
 
+#include <GL/freeglut.h>
 #include "../domain/interfaces/drawer.hpp"
+#include "../sprites/sprite_manager.hpp"
 #include "../domain/interfaces/drawable.hpp"
 
 class OpenGLDrawer : public IDrawer {
@@ -16,4 +18,6 @@ class OpenGLDrawer : public IDrawer {
     void drawTimer(const Timer& timer) const override;
     void drawPlayerScore(const Player& player, Point position, int width, int height) const;
     void setTileSize(int tile_size) override;
+
+    SpriteManager spriteManager;
 };

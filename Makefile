@@ -12,6 +12,7 @@ SOURCES = main.cpp \
 					domain/game/core.cpp \
 					domain/game/timer.cpp \
 					adapters/opengl_drawer.cpp \
+					sprites/stbi_image.cpp \
 					adapters/opengl_controller.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)

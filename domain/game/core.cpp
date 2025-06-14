@@ -91,7 +91,7 @@ void Game::init(){
 
     Category random_category = static_cast<Category>(category_dist(rng));
 
-    TrashBag new_bag({0,0}, 10, 10, random_category);
+    TrashBag new_bag(Point{0,0}, TRASH_BAG_SIZE, TRASH_BAG_SIZE, random_category);
 
     spawnElement(new_bag, map);
 
@@ -135,7 +135,7 @@ void Game::spawnTrashBags(){
 
   Category random_category = static_cast<Category>(category_dist(rng));
 
-  TrashBag new_bag({0,0}, 10, 10, random_category);
+  TrashBag new_bag(Point{0,0}, TRASH_BAG_SIZE, TRASH_BAG_SIZE, random_category);
 
   spawnElement(new_bag, map);
 

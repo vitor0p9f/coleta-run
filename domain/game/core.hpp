@@ -18,7 +18,9 @@ const int HALLWAY_SIZE = 80;
 const int MAP_WIDTH = 600;
 const int MAP_HEIGHT = 600;
 
-const int PLAYER_SIZE = 10;
+const int PLAYER_SIZE = 32;
+const int TRASH_CAN_SIZE = 32;
+const int TRASH_BAG_SIZE = 24;
 
 const int TIME_IN_SECONDS = 120;
 
@@ -58,11 +60,11 @@ class Game {
     IController& controller;
     
     std::vector<TrashCan> trash_cans = {
-      TrashCan{Point{0, 0}, 10, 10, METAL},
-      TrashCan{Point{0, 0}, 10, 10, PAPER},
-      TrashCan{Point{0, 0}, 10, 10, GLASS},
-      TrashCan{Point{0, 0}, 10, 10, PLASTIC},
-      TrashCan{Point{0, 0}, 10, 10, ORGANIC}
+      TrashCan{Point{0, 0}, TRASH_CAN_SIZE, TRASH_CAN_SIZE, METAL},
+      TrashCan{Point{0, 0}, TRASH_CAN_SIZE, TRASH_CAN_SIZE, PAPER},
+      TrashCan{Point{0, 0}, TRASH_CAN_SIZE, TRASH_CAN_SIZE, GLASS},
+      TrashCan{Point{0, 0}, TRASH_CAN_SIZE, TRASH_CAN_SIZE, PLASTIC},
+      TrashCan{Point{0, 0}, TRASH_CAN_SIZE, TRASH_CAN_SIZE, ORGANIC}
     };
     
     Map map = Map(Area{Point{0,0}, MAP_WIDTH, MAP_HEIGHT}, 
@@ -81,6 +83,8 @@ class Game {
     std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
     
     Timer game_timer = Timer(Point{0, 0}, 10, 10, TIME_IN_SECONDS);
+
+    bool map_was_drawed = false;
 
     void spawnElement(Drawable& element, Map& map);
     void spawnTrashBags();

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdio>
 #include <iostream>
-#include <ostream>
+#include <string>
 #include <vector>
 #include "opengl_drawer.hpp"
 #include "../domain/game/map/map.hpp"
@@ -52,38 +52,31 @@ void OpenGLDrawer::drawTrashCan(const TrashCan& trash_can) const {
   int width = trash_can.getWidth() * tile_size; 
   int height = trash_can.getHeight() * tile_size;
 
-  std::vector<float> color;
+  std::string category = "";
 
   switch (trash_can.category) {
     case PAPER:
-      color = {0.0f, 0.0f, 1.0f}; // RGB: blue
+      category = "paper";
     break;
 
     case GLASS:
-      color = {0.0f, 1.0f, 0.0f}; // RGB: green
+      category = "glass";
     break;
 
     case PLASTIC:
-      color = {1.0f, 0.0f, 0.0f}; // RGB: vermelho
+      category = "plastic";
     break;
 
     case METAL:
-      color = {1.0f, 1.0f, 0.0f}; // RGB: yellow
+      category = "metal";
     break;
 
     case ORGANIC:
-      color = {1.4f, 0.6f, 0.2f}; // RGB: brown
+      category = "organic";
     break;
   }
 
-  glBegin(GL_QUADS);
-    glColor3f(color[0], color[1], color[2]); // RGB: black
-
-    glVertex2i(x, y);
-    glVertex2i(x + width, y);
-    glVertex2i(x + width, y + height);
-    glVertex2i(x, y + height);
-  glEnd();
+  spriteManager.draw("trash_can_" + category, x, y, width, height);
 }
 
 void OpenGLDrawer::drawMap(const Map& map) const {
@@ -109,57 +102,40 @@ void OpenGLDrawer::drawPlayer(const Player& player) const {
   int width = player.getWidth() * tile_size; 
   int height = player.getHeight() * tile_size;
 
-  glBegin(GL_QUADS);
-    glColor3f(0.8f, 0.5f, 0.3f);
-
-    glVertex2i(x, y);
-    glVertex2i(x + width, y);
-    glVertex2i(x + width, y + height);
-    glVertex2i(x, y + height);
-  glEnd();
+  spriteManager.draw("player_" + std::to_string(player.id), x, y, width, height);
 }
 
 void OpenGLDrawer::drawTrashBag(const TrashBag& trash_bag) const {
-    int center_x = (trash_bag.getCoordinate().x * tile_size) + (trash_bag.getWidth() * tile_size / 2);
-    int center_y = (trash_bag.getCoordinate().y * tile_size) + (trash_bag.getHeight() * tile_size / 2);
-    float radius = (float)std::min(trash_bag.getWidth(), trash_bag.getHeight()) * tile_size / 2.0f;
+  int x = trash_bag.getCoordinate().x * tile_size;
+  int y = trash_bag.getCoordinate().y * tile_size;
+  int width = trash_bag.getWidth() * tile_size; 
+  int height = trash_bag.getHeight() * tile_size;
 
-    std::vector<float> color;
+  std::string category = "";
 
-    switch (trash_bag.category) { // Assumindo que TrashBag tem um membro 'type'
-        case PAPER:
-            color = {0.0f, 0.0f, 1.0f}; // Azul
-            break;
-        case GLASS:
-            color = {0.0f, 1.0f, 0.0f}; // Verde
-            break;
-        case PLASTIC:
-            color = {1.0f, 0.0f, 0.0f}; // Vermelho
-            break;
-        case METAL:
-            color = {1.0f, 1.0f, 0.0f}; // Amarelo
-            break;
-        case ORGANIC:
-            color = {0.58f, 0.29f, 0.0f}; // Marrom (corrigido 1.4, 0.6, 0.2 para 0-1 range)
-            break;
-        default:
-            color = {0.5f, 0.5f, 0.5f}; // Cinza padrão
-            break;
-    }
+  switch (trash_bag.category) {
+    case PAPER:
+      category = "paper";
+    break;
 
-    glColor3f(color[0], color[1], color[2]);
+    case GLASS:
+      category = "glass";
+    break;
 
-    glBegin(GL_TRIANGLE_FAN);
-        glVertex2i(center_x, center_y);
+    case PLASTIC:
+      category = "plastic";
+    break;
 
-        const int NUM_SEGMENTS = 30; 
-        for (int i = 0; i <= NUM_SEGMENTS; ++i) {
-            float angle = 2.0f * M_PI * (float)i / (float)NUM_SEGMENTS;
-            int x = center_x + static_cast<int>(radius * std::cos(angle));
-            int y = center_y + static_cast<int>(radius * std::sin(angle));
-            glVertex2i(x, y);
-        }
-    glEnd();
+    case METAL:
+      category = "metal";
+    break;
+
+    case ORGANIC:
+      category = "organic";
+    break;
+  }
+
+  spriteManager.draw("trash_bag_" + category, x, y, width, height);
 }
 
 void OpenGLDrawer::drawTimer(const Timer& timer) const {
@@ -206,4 +182,3 @@ void OpenGLDrawer::drawPlayerScore(const Player& player, Point position, int wid
         glutBitmapCharacter(font, c);
     }
 }
-

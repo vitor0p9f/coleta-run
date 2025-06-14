@@ -28,6 +28,9 @@ const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
 void display(){
   glClear(GL_COLOR_BUFFER_BIT);
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   // Superior viewport
   glViewport(0, WINDOW_HEIGHT * WINDOW_FRACTION, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -38,16 +41,6 @@ void display(){
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
-  //glColor3f(0.5f, 1.0f, 0.5f);
-
-  //glBegin(GL_QUADS);
-      //glVertex2f(0, 0);
-      //glVertex2f(WINDOW_WIDTH, 0);
-      //glVertex2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-      //glVertex2f(0, WINDOW_HEIGHT);
-  //glEnd();
-  //
 
   game.getTimer().draw(opengl_drawer);
   opengl_drawer.drawPlayerScore(game.getPlayer1(), Point{0,0}, 100, 60);
@@ -84,6 +77,23 @@ int main (int argc, char *argv[]) {
   glutCreateWindow("ColetaRun");
   
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+  
+  opengl_drawer.spriteManager.load("player_1", "sprites/player_1.png");
+  opengl_drawer.spriteManager.load("player_2", "sprites/player_2.png");
+  
+  opengl_drawer.spriteManager.load("trash_can_paper", "sprites/trash_can_paper.png");
+  opengl_drawer.spriteManager.load("trash_can_metal", "sprites/trash_can_metal.png");
+  opengl_drawer.spriteManager.load("trash_can_organic", "sprites/trash_can_organic.png");
+  opengl_drawer.spriteManager.load("trash_can_glass", "sprites/trash_can_glass.png");
+  opengl_drawer.spriteManager.load("trash_can_plastic", "sprites/trash_can_plastic.png");
+
+  opengl_drawer.spriteManager.load("trash_bag_paper", "sprites/trash_bag_paper.png");
+  opengl_drawer.spriteManager.load("trash_bag_metal", "sprites/trash_bag_metal.png");
+  opengl_drawer.spriteManager.load("trash_bag_organic", "sprites/trash_bag_organic.png");
+  opengl_drawer.spriteManager.load("trash_bag_glass", "sprites/trash_bag_glass.png");
+  opengl_drawer.spriteManager.load("trash_bag_plastic", "sprites/trash_bag_plastic.png");
+
+  opengl_drawer.spriteManager.load("walkable", "sprites/walkable.png");
 
   game.init();
 
