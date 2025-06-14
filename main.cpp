@@ -93,8 +93,6 @@ int main (int argc, char *argv[]) {
   opengl_drawer.spriteManager.load("trash_bag_glass", "sprites/trash_bag_glass.png");
   opengl_drawer.spriteManager.load("trash_bag_plastic", "sprites/trash_bag_plastic.png");
 
-  opengl_drawer.spriteManager.load("walkable", "sprites/walkable.png");
-
   game.init();
 
   game.getPlayer1().bindKeys({
