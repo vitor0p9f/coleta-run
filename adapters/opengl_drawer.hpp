@@ -22,7 +22,7 @@ class OpenGLDrawer : public IDrawer {
     SpriteManager spriteManager;
 
   private:
-    const int FLOOR_SPRITE_SIZE = 16; 
+    const int GRASS_SPRITE_SIZE = 16; 
     const int PLAYER_SPRITE_SIZE = 32; 
     const int TRASH_CAN_SPRITE_SIZE = 32; 
     const int TRASH_BAG_SPRITE_SIZE = 16; 

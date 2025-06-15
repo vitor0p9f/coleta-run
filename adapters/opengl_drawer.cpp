@@ -18,18 +18,18 @@ void OpenGLDrawer::drawRoom(const Room& room) const {
   int width = room.getWidth();
   int height = room.getHeight();
   
-  for (int y = 0; y < height; y += FLOOR_SPRITE_SIZE) {
-    for (int x = 0; x < width; x += FLOOR_SPRITE_SIZE) {
+  for (int y = 0; y < height; y += GRASS_SPRITE_SIZE) {
+    for (int x = 0; x < width; x += GRASS_SPRITE_SIZE) {
       int next_x = coordinate.x + x;
       int next_y = coordinate.y + y;
 
-      int draw_width = FLOOR_SPRITE_SIZE;
-      int draw_height = FLOOR_SPRITE_SIZE;
+      int draw_width = GRASS_SPRITE_SIZE;
+      int draw_height = GRASS_SPRITE_SIZE;
 
-      if (x + FLOOR_SPRITE_SIZE > width) {
+      if (x + GRASS_SPRITE_SIZE > width) {
           draw_width = width - x;
       }
-      if (y + FLOOR_SPRITE_SIZE > height) {
+      if (y + GRASS_SPRITE_SIZE > height) {
           draw_height = height - y;
       }
 
@@ -43,18 +43,18 @@ void OpenGLDrawer::drawHallway(const Hallway& hallway) const {
   int width = hallway.getWidth();
   int height = hallway.getHeight();
 
-  for (int y = 0; y < height; y += FLOOR_SPRITE_SIZE) {
-    for (int x = 0; x < width; x += FLOOR_SPRITE_SIZE) {
+  for (int y = 0; y < height; y += GRASS_SPRITE_SIZE) {
+    for (int x = 0; x < width; x += GRASS_SPRITE_SIZE) {
       int next_x = coordinate.x + x;
       int next_y = coordinate.y + y;
 
-      int draw_width = FLOOR_SPRITE_SIZE;
-      int draw_height = FLOOR_SPRITE_SIZE;
+      int draw_width = GRASS_SPRITE_SIZE;
+      int draw_height = GRASS_SPRITE_SIZE;
 
-      if (x + FLOOR_SPRITE_SIZE > width) {
+      if (x + GRASS_SPRITE_SIZE > width) {
           draw_width = width - x;
       }
-      if (y + FLOOR_SPRITE_SIZE > height) {
+      if (y + GRASS_SPRITE_SIZE > height) {
           draw_height = height - y;
       }
 

@@ -12,7 +12,7 @@
 const int WINDOW_WIDTH = 1366;
 const int WINDOW_HEIGHT = 688;
 const float WINDOW_FRACTION = 0.97;
-const int TILE_SIZE = 1;
+const int FLOOR_SPRITE_SIZE = 16;
 
 OpenGLDrawer opengl_drawer;
 OpenGLController opengl_controller;
@@ -22,14 +22,33 @@ const int UPPER_VIEWPORT_HEIGHT = WINDOW_HEIGHT - static_cast<int>(WINDOW_HEIGHT
 const int TIMER_CENTER_X = WINDOW_WIDTH / 2;
 const int TIMER_CENTER_Y = UPPER_VIEWPORT_HEIGHT / 2;
 
-const int WORLD_WIDTH = game.getMap().getWidth() * TILE_SIZE;
-const int WORLD_HEIGHT = game.getMap().getHeight() * TILE_SIZE;
+const int WORLD_WIDTH = game.getMap().getWidth();
+const int WORLD_HEIGHT = game.getMap().getHeight();
 
 void display(){
   glClear(GL_COLOR_BUFFER_BIT);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  // Draw floor
+  for (int y = 0; y < WINDOW_HEIGHT; y += FLOOR_SPRITE_SIZE) {
+    for (int x = 0; x < WINDOW_WIDTH; x += FLOOR_SPRITE_SIZE) {
+
+      int draw_width = FLOOR_SPRITE_SIZE;
+      int draw_height = FLOOR_SPRITE_SIZE;
+
+      if (x + FLOOR_SPRITE_SIZE > WINDOW_WIDTH) {
+          draw_width = WINDOW_WIDTH - x;
+      }
+      if (y + FLOOR_SPRITE_SIZE > WINDOW_HEIGHT) {
+          draw_height = WINDOW_HEIGHT - y;
+      }
+
+      opengl_drawer.spriteManager.draw("not_walkable", x, y, draw_width, draw_height);
+    }
+  }
+
 
   // Superior viewport
   glViewport(0, WINDOW_HEIGHT * WINDOW_FRACTION, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -93,7 +112,9 @@ int main (int argc, char *argv[]) {
   opengl_drawer.spriteManager.load("trash_bag_glass", "sprites/trash_bag_glass.png");
   opengl_drawer.spriteManager.load("trash_bag_plastic", "sprites/trash_bag_plastic.png");
 
-  opengl_drawer.spriteManager.load("walkable", "sprites/grass.png");
+  opengl_drawer.spriteManager.load("walkable", "sprites/floor.png");
+  opengl_drawer.spriteManager.load("not_walkable", "sprites/grass.png");
+  
   game.init();
 
   game.getPlayer1().bindKeys({
@@ -111,8 +132,6 @@ int main (int argc, char *argv[]) {
   });
 
   game.getTimer().setCoordinate(Point{TIMER_CENTER_X, TIMER_CENTER_Y});
-
-  opengl_drawer.setTileSize(TILE_SIZE);
 
   glutKeyboardFunc(OpenGLController::keyboardDown);
   glutKeyboardUpFunc(OpenGLController::keyboardUp);
