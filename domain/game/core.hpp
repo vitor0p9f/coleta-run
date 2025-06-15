@@ -18,7 +18,7 @@ const int HALLWAY_SIZE = 80;
 const int MAP_WIDTH = 600;
 const int MAP_HEIGHT = 600;
 
-const int PLAYER_SIZE = 32;
+const int PLAYER_SIZE = 30;
 const int TRASH_CAN_SIZE = 32;
 const int TRASH_BAG_SIZE = 24;
 

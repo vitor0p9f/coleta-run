@@ -2,7 +2,7 @@
 
 #include <GL/freeglut.h>
 #include "../domain/interfaces/drawer.hpp"
-#include "../sprites/sprite_manager.hpp"
+#include "sprite_manager.hpp"
 #include "../domain/interfaces/drawable.hpp"
 
 class OpenGLDrawer : public IDrawer {
@@ -20,4 +20,10 @@ class OpenGLDrawer : public IDrawer {
     void setTileSize(int tile_size) override;
 
     SpriteManager spriteManager;
+
+  private:
+    const int FLOOR_SPRITE_SIZE = 16; 
+    const int PLAYER_SPRITE_SIZE = 32; 
+    const int TRASH_CAN_SPRITE_SIZE = 32; 
+    const int TRASH_BAG_SPRITE_SIZE = 16; 
 };

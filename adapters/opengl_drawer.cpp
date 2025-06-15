@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <cmath>
 #include <cstdio>
-#include <iostream>
 #include <string>
 #include <vector>
 #include "opengl_drawer.hpp"
@@ -15,42 +14,58 @@
 OpenGLDrawer::OpenGLDrawer(){};
 
 void OpenGLDrawer::drawRoom(const Room& room) const {
-  int x = room.getCoordinate().x * tile_size;
-  int y = room.getCoordinate().y * tile_size;
-  int width = room.getWidth() * tile_size; 
-  int height = room.getHeight() * tile_size;
+  Point coordinate = room.getCoordinate();
+  int width = room.getWidth();
+  int height = room.getHeight();
+  
+  for (int y = 0; y < height; y += FLOOR_SPRITE_SIZE) {
+    for (int x = 0; x < width; x += FLOOR_SPRITE_SIZE) {
+      int next_x = coordinate.x + x;
+      int next_y = coordinate.y + y;
 
-  glBegin(GL_QUADS);
-    glColor3f(0.0f, 0.0f, 0.0f); // RBG: black
+      int draw_width = FLOOR_SPRITE_SIZE;
+      int draw_height = FLOOR_SPRITE_SIZE;
 
-    glVertex2i(x, y);
-    glVertex2i(x + width, y);
-    glVertex2i(x + width, y + height);
-    glVertex2i(x, y + height);
-  glEnd();
+      if (x + FLOOR_SPRITE_SIZE > width) {
+          draw_width = width - x;
+      }
+      if (y + FLOOR_SPRITE_SIZE > height) {
+          draw_height = height - y;
+      }
+
+      spriteManager.draw("walkable", next_x, next_y, draw_width, draw_height);
+    }
+  }
 }
 
 void OpenGLDrawer::drawHallway(const Hallway& hallway) const {
-  int x = hallway.getCoordinate().x * tile_size;
-  int y = hallway.getCoordinate().y * tile_size;
-  int width = hallway.getWidth() * tile_size; 
-  int height = hallway.getHeight() * tile_size;
+  Point coordinate = hallway.getCoordinate();
+  int width = hallway.getWidth();
+  int height = hallway.getHeight();
 
-  glBegin(GL_QUADS);
-    glColor3f(0.0f, 0.0f, 0.0f); // RGB: black
+  for (int y = 0; y < height; y += FLOOR_SPRITE_SIZE) {
+    for (int x = 0; x < width; x += FLOOR_SPRITE_SIZE) {
+      int next_x = coordinate.x + x;
+      int next_y = coordinate.y + y;
 
-    glVertex2i(x, y);
-    glVertex2i(x + width, y);
-    glVertex2i(x + width, y + height);
-    glVertex2i(x, y + height);
-  glEnd();
+      int draw_width = FLOOR_SPRITE_SIZE;
+      int draw_height = FLOOR_SPRITE_SIZE;
+
+      if (x + FLOOR_SPRITE_SIZE > width) {
+          draw_width = width - x;
+      }
+      if (y + FLOOR_SPRITE_SIZE > height) {
+          draw_height = height - y;
+      }
+
+      spriteManager.draw("walkable", next_x, next_y, draw_width, draw_height);
+    }
+  }
 }
 
 void OpenGLDrawer::drawTrashCan(const TrashCan& trash_can) const {
-  int x = trash_can.getCoordinate().x * tile_size;
-  int y = trash_can.getCoordinate().y * tile_size;
-  int width = trash_can.getWidth() * tile_size; 
-  int height = trash_can.getHeight() * tile_size;
+  int x = trash_can.getCoordinate().x;
+  int y = trash_can.getCoordinate().y;
 
   std::string category = "";
 
@@ -76,7 +91,7 @@ void OpenGLDrawer::drawTrashCan(const TrashCan& trash_can) const {
     break;
   }
 
-  spriteManager.draw("trash_can_" + category, x, y, width, height);
+  spriteManager.draw("trash_can_" + category, x, y, TRASH_CAN_SPRITE_SIZE, TRASH_CAN_SPRITE_SIZE);
 }
 
 void OpenGLDrawer::drawMap(const Map& map) const {
@@ -97,19 +112,17 @@ void OpenGLDrawer::setTileSize(int tile_size){
 }
 
 void OpenGLDrawer::drawPlayer(const Player& player) const {
-  int x = player.getCoordinate().x * tile_size;
-  int y = player.getCoordinate().y * tile_size;
-  int width = player.getWidth() * tile_size; 
-  int height = player.getHeight() * tile_size;
+  int x = player.getCoordinate().x;
+  int y = player.getCoordinate().y;
 
-  spriteManager.draw("player_" + std::to_string(player.id), x, y, width, height);
+  spriteManager.draw(
+    "player_" + std::to_string(player.id), x, y, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE
+  );
 }
 
 void OpenGLDrawer::drawTrashBag(const TrashBag& trash_bag) const {
   int x = trash_bag.getCoordinate().x * tile_size;
   int y = trash_bag.getCoordinate().y * tile_size;
-  int width = trash_bag.getWidth() * tile_size; 
-  int height = trash_bag.getHeight() * tile_size;
 
   std::string category = "";
 
@@ -135,7 +148,7 @@ void OpenGLDrawer::drawTrashBag(const TrashBag& trash_bag) const {
     break;
   }
 
-  spriteManager.draw("trash_bag_" + category, x, y, width, height);
+  spriteManager.draw("trash_bag_" + category, x, y, TRASH_BAG_SPRITE_SIZE, TRASH_BAG_SPRITE_SIZE);
 }
 
 void OpenGLDrawer::drawTimer(const Timer& timer) const {

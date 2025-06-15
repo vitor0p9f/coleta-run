@@ -11,8 +11,8 @@
 
 const int WINDOW_WIDTH = 1366;
 const int WINDOW_HEIGHT = 688;
-const float WINDOW_FRACTION = 0.95;
-const int TILE_SIZE = 8;
+const float WINDOW_FRACTION = 0.97;
+const int TILE_SIZE = 1;
 
 OpenGLDrawer opengl_drawer;
 OpenGLController opengl_controller;
@@ -93,6 +93,7 @@ int main (int argc, char *argv[]) {
   opengl_drawer.spriteManager.load("trash_bag_glass", "sprites/trash_bag_glass.png");
   opengl_drawer.spriteManager.load("trash_bag_plastic", "sprites/trash_bag_plastic.png");
 
+  opengl_drawer.spriteManager.load("walkable", "sprites/grass.png");
   game.init();
 
   game.getPlayer1().bindKeys({
