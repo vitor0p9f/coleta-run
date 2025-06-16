@@ -1,14 +1,21 @@
 #include "map.hpp"
 #include "bsp.hpp"
 #include "hallway.hpp"
+#include <cstdio>
 #include <vector>
 
-Map::Map(Area area, int partition_width, int partition_height, int room_margin, int hallway_size){
+Map::Map(
+  Area area, 
+  int partition_width, 
+  int partition_height, 
+  int room_margin, 
+  int hallway_size
+) : Drawable({0,0}, area.width, area.height){
   BSP bsp;
 
   width = area.width;
   height = area.height;
-  
+
   auto [map_rooms, map_hallways] = bsp.execute(
     area, partition_width, partition_height, room_margin, hallway_size
   );
@@ -29,17 +36,21 @@ void Map::draw(const IDrawer& drawer) const{
 };
 
 std::vector<std::vector<bool>> Map::generateWalkableMap(
-  int width, 
-  int height, 
+  int map_width, 
+  int map_height, 
   const std::vector<Room>& rooms, 
   const std::vector<Hallway>& hallways
 ) {
   std::vector<std::vector<bool>> walkable = std::vector(height, std::vector(width, false));
 
   for (const Room& room : rooms) {
-    for (int x = room.coordinate.x; x < room.coordinate.x + room.width; ++x) {
-      for (int y = room.coordinate.y; y < room.coordinate.y + room.height; ++y) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+    Point room_coordinate = room.getCoordinate();
+    int room_width = room.getWidth();
+    int room_height = room.getHeight();
+
+    for (int x = room_coordinate.x; x < room_coordinate.x + room_width; ++x) {
+      for (int y = room_coordinate.y; y < room_coordinate.y + room_height; ++y) {
+        if (x >= 0 && x < map_width && y >= 0 && y < map_height) {
           walkable[y][x] = true;
         }
       }
@@ -47,35 +58,30 @@ std::vector<std::vector<bool>> Map::generateWalkableMap(
   }
 
   for (const Hallway& hallway : hallways) {
-    for (int x = hallway.coordinate.x; x < hallway.coordinate.x + hallway.width; x++) {
-      for (int y = hallway.coordinate.y; y < hallway.coordinate.y + hallway.height; y++) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
+    Point hallway_coordinate = hallway.getCoordinate();
+    int hallway_width = hallway.getWidth();
+    int hallway_height = hallway.getHeight();
+
+    for (int x = hallway_coordinate.x; x < hallway_coordinate.x + hallway_width; x++) {
+      for (int y = hallway_coordinate.y; y < hallway_coordinate.y + hallway_height; y++) {
+        if (x >= 0 && x < map_width && y >= 0 && y < map_height) {
           walkable[y][x] = true;
         }
       }
     }
   }
 
-
   return walkable;
 }
 
-std::vector<std::vector<bool>> Map::getWalkableMap() const {
+WalkableMap& Map::getWalkableMap(){
   return walkable_map;
 }
 
-std::vector<Room> Map::getRooms() const {
+const std::vector<Room>& Map::getRooms() const {
   return rooms;
 }
 
-std::vector<Hallway> Map::getHallways() const {
+const std::vector<Hallway>& Map::getHallways() const {
   return hallways;
-}
-
-int Map::getWidth() const {
-  return width;
-}
-
-int Map::getHeight() const {
-  return height;
 }
