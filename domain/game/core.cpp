@@ -15,6 +15,17 @@ Game::Game(
   IController& controller
 ) : drawer(drawer), controller(controller){}
 
+GameState* game_state_ptr = nullptr;
+GameResult game_result = GameResult::Ongoing;
+
+void Game::setGameState(GameState* state) {
+    game_state_ptr = state;
+}
+
+GameResult Game::getResult() const {
+    return game_result;
+}
+
 void Game::spawnElement(Drawable& element, Map& map){
   static std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 
@@ -27,6 +38,7 @@ void Game::spawnElement(Drawable& element, Map& map){
 
   std::uniform_int_distribution<int> distribution_x(0, map_width - element_width);
   std::uniform_int_distribution<int> distribution_y(0, map_height - element_height);
+  
 
   const int MAX_ATTEMPTS = 100;
   int attempts = 0;
@@ -152,24 +164,26 @@ bool Game::isColliding(const Drawable& obj1, const Drawable& obj2) {
 }
 
 void Game::update(){
+  if (!game_state_ptr || *game_state_ptr != GameState::PLAYING) {
+    return;  
+    }
   game_timer.update();
 
-  if (game_timer.isFinished()) {
-    printf("Time's up! Game Over.\n");
+   if (game_timer.isFinished()) {
+        int player_1_points = player_1.getScore();
+        int player_2_points = player_2.getScore();
 
-    int player_1_points = player_1.getScore();
-    int player_2_points = player_2.getScore();
+        if (player_1_points > player_2_points){
+            game_result = GameResult::Player1Win;
+        } else if (player_2_points > player_1_points){
+            game_result = GameResult::Player2Win;
+        } else {
+            game_result = GameResult::Tie;
+        }
 
-    if (player_1_points > player_2_points){
-      printf("Player 1 ganhou!\n");
-    }else if (player_2_points > player_1_points){
-      printf("Player 2 ganhou!\n");
-    }else {
-      printf("Empate!\n");
+        *game_state_ptr = GameState::END;
+        return; 
     }
-
-    return; // Stop processing updates if the game is over
-  }
 
   spawnTrashBags();
   handleCollisions();

@@ -54,6 +54,9 @@ class Game {
     
     void update();
 
+    void setGameState(GameState* gameState);
+    GameResult getResult() const;
+
   private:
     const IDrawer& drawer;
     
@@ -86,9 +89,13 @@ class Game {
 
     bool map_was_drawed = false;
 
+    GameState* game_state_ptr = nullptr;
+    GameResult game_result = GameResult::Ongoing;
+
     void spawnElement(Drawable& element, Map& map);
     void spawnTrashBags();
     void handleCollisions();
     void removeTrashBag(TrashBag* bag_to_remove);
     bool isColliding(const Drawable& obj1, const Drawable& obj2);
+
 };
