@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include <cstdio>
 #include <vector>
+#include <clocale>
 #include "domain/game/core.hpp"
 #include "adapters/opengl_drawer.hpp"
 #include "domain/game/player.hpp"
@@ -25,7 +26,7 @@ OpenGLController opengl_controller;
 Game game = Game(opengl_drawer,opengl_controller);
 
 Menu mainMenu({"Iniciar", "Instruções", "Sair"});
-Menu pauseMenu({"Continuar","Reiniciar", "Instruções", "Sair"});
+Menu pauseMenu({"Continuar" ,"Instruções", "Sair"});
 
 const int UPPER_VIEWPORT_HEIGHT = WINDOW_HEIGHT - static_cast<int>(WINDOW_HEIGHT * WINDOW_FRACTION);
 const int TIMER_CENTER_X = WINDOW_WIDTH / 2;
@@ -141,6 +142,7 @@ void display() {
 }
 
 int main (int argc, char *argv[]) {
+  setlocale(LC_ALL, "Portuguese");
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);

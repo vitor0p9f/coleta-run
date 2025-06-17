@@ -168,6 +168,8 @@ void drawEnd(){
     opengl_drawer.spriteManager.draw("end", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     
     GameResult result = game.getResult();
+    
+    glColor3f(0.0f, 0.0f, 0.0f);
 
     switch (result) {
         case GameResult::Player1Win:
@@ -219,7 +221,7 @@ void keyboardDown(unsigned char key, int x, int y) {
         case GameState::MENU:
             if (key == 13) { // ENTER
                 int selected = mainMenu.getSelectedOption();
-                if (selected == 0) gameState = GameState::PLAYING;
+                if (selected == 0) game.resetGame();
                 else if (selected == 1) gameState = GameState::INSTRUCTIONS;
                 else if (selected == 2) gameState = GameState::EXIT;
             }
@@ -240,15 +242,15 @@ void keyboardDown(unsigned char key, int x, int y) {
         case GameState::PAUSE:
             if (key == 13) { // ENTER
                 int sel = pauseMenu.getSelectedOption();
-                if (sel == 0) gameState = GameState::PLAYING;       // Reiniciar
-                //else if (sel == 1) gameState = GameState::PLAYING;
+                if (sel == 0) gameState = GameState::PLAYING;       
+               // else if (sel == 1) game.resetGame(); // Reiniciar
                 else if (sel == 1) gameState = GameState::INSTRUCTIONS;
                 else if (sel == 2) gameState = GameState::MENU;
             } else if (key == 27) gameState = GameState::PLAYING;  // ESC resume
             break;
 
         case GameState::END:
-            if (key == 'r') gameState = GameState::PLAYING;
+            if (key == 13) game.resetGame();
             else if (key == 27) gameState = GameState::MENU;
             break;
 

@@ -41,7 +41,7 @@ class Game {
       return player_2;
     }
 
-    const Map& getMap(){
+    Map& getMap(){
       return map;
     }
 
@@ -51,7 +51,8 @@ class Game {
 
     void init();
 
-    
+    void resetGame();
+
     void update();
 
     void setGameState(GameState* gameState);
@@ -82,7 +83,7 @@ class Game {
     
     std::vector<TrashBag> trash_bags = {};
     int max_trash_bags = 30;
-    int spawn_interval_ms = 10000;
+    int spawn_interval_ms = 8000; // 8 seconds
     std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
     
     Timer game_timer = Timer(Point{0, 0}, 10, 10, TIME_IN_SECONDS);

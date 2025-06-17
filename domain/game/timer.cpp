@@ -53,3 +53,9 @@ void Timer::draw(const IDrawer& drawer) const {
 bool Timer::isFinished() const {
     return current_remaining_seconds <= 0;
 }
+
+void Timer::reset() {
+    current_remaining_seconds = initial_duration_seconds;
+    start_time = std::chrono::high_resolution_clock::now();  
+    update();  
+}

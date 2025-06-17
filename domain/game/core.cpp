@@ -9,6 +9,10 @@
 #include <random>
 #include <chrono>
 #include <vector>
+#include "../domain/interfaces/windows_config.hpp"
+
+extern Game game;
+extern GameState gameState;
 
 Game::Game(
   const IDrawer& drawer,
@@ -230,4 +234,22 @@ void Game::handleCollisions() {
       }
     }
   }
+}
+
+void Game::resetGame() {
+    // Reinicia os jogadores
+    game.getPlayer1().setCoordinate(Point{100, 100});
+    game.getPlayer1().score = 0;
+    game.getPlayer1().detachBag();  
+    
+    game.getPlayer2().setCoordinate(Point{320, 520});
+    game.getPlayer2().score = 0;
+    game.getPlayer2().detachBag();  
+
+    //game.getMap().reset(); 
+    
+
+    game.getTimer().reset();  
+    
+      gameState = GameState::PLAYING;
 }

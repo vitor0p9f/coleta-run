@@ -27,6 +27,8 @@ public:
     // Desenha o timer. É const porque apenas LÊ o estado para desenhar.
     void draw(const IDrawer& drawer) const override;
 
+    void reset();
+
 private:
     std::chrono::high_resolution_clock::time_point start_time;
     int initial_duration_seconds;
