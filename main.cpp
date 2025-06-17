@@ -12,8 +12,6 @@
 #include "adapters/game_state_controller.hpp"
 #include "domain/interfaces/menu.hpp"
 
-
-
 int WINDOW_WIDTH = 1366;
 int WINDOW_HEIGHT = 768;
 const float WINDOW_FRACTION = 0.97;
@@ -143,6 +141,7 @@ void display() {
 
 int main (int argc, char *argv[]) {
   setlocale(LC_ALL, "Portuguese");
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
