@@ -54,6 +54,9 @@ class Game {
     
     void update();
 
+    void setGameState(GameState* gameState);
+    GameResult getResult() const;
+
   private:
     const IDrawer& drawer;
     
@@ -79,16 +82,20 @@ class Game {
     
     std::vector<TrashBag> trash_bags = {};
     int max_trash_bags = 30;
-    int spawn_interval_ms = 10000;
+    int spawn_interval_ms = 8000; // 8 seconds
     std::chrono::high_resolution_clock::time_point last_spawn_time = std::chrono::high_resolution_clock::now();
     
     Timer game_timer = Timer(Point{0, 0}, 10, 10, TIME_IN_SECONDS);
 
     bool map_was_drawed = false;
 
+    GameState* game_state_ptr = nullptr;
+    GameResult game_result = GameResult::Ongoing;
+
     void spawnElement(Drawable& element, Map& map);
     void spawnTrashBags();
     void handleCollisions();
     void removeTrashBag(TrashBag* bag_to_remove);
     bool isColliding(const Drawable& obj1, const Drawable& obj2);
+
 };

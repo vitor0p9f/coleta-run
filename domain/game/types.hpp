@@ -8,6 +8,24 @@ enum Category{
   ORGANIC
 };
 
+enum class GameState {
+  SPLASH,
+  MENU,
+  PAUSE,
+  INSTRUCTIONS,
+  PLAYING,
+  END,
+  EXIT
+};
+
+enum class GameResult {
+  Player1Win,
+  Player2Win,
+  Tie,
+  Ongoing
+};
+
+
 struct Point {
   int x, y;
 
