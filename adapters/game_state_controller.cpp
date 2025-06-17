@@ -285,3 +285,57 @@ void specialKeysDown(int key, int x, int y) {
 
     glutPostRedisplay();
 }
+
+void mouseClick(int button, int state, int x, int y) {
+    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN) return;
+
+    int adjustedY = WINDOW_HEIGHT - y; 
+
+    float startY = WINDOW_HEIGHT / 2 - 80;
+    float spacing = -80;
+    float scale = 0.3f;
+    int buttonWidth = 400;
+    int buttonHeight = 50;
+    int startX = WINDOW_WIDTH / 2 + 60;
+
+    if (gameState == GameState::MENU) {
+        std::vector<std::string> options = {"Iniciar", "Instrucoes", "Sair"};
+        for (int i = 0; i < static_cast<int>(options.size()); i++) {
+            float btnX = startX;
+            float btnY = startY + i * spacing;
+
+            if (x >= btnX - 10 && x <= btnX + buttonWidth &&
+                adjustedY >= btnY - 5 && adjustedY <= btnY + buttonHeight) {
+                
+                if (i == 0) { 
+                    game.resetGame();
+                    gameState = GameState::PLAYING;
+                } else if (i == 1) { 
+                    gameState = GameState::INSTRUCTIONS;
+                } else if (i == 2) { 
+                    gameState = GameState::EXIT;
+                }
+            }
+        }
+    } else if (gameState == GameState::PAUSE) {
+        std::vector<std::string> options = {"Continuar", "Instrucoes", "Sair"};
+        for (int i = 0; i < static_cast<int>(options.size()); i++) {
+            float btnX = startX;
+            float btnY = startY + i * spacing;
+
+            if (x >= btnX - 10 && x <= btnX + buttonWidth &&
+                adjustedY >= btnY - 5 && adjustedY <= btnY + buttonHeight) {
+               
+                if (i == 0) {
+                    gameState = GameState::PLAYING;
+                } else if (i == 1) { 
+                    gameState = GameState::INSTRUCTIONS;
+                } else if (i == 2) { 
+                    gameState = GameState::MENU;
+                }
+            }
+        }
+    }
+
+    glutPostRedisplay();
+}

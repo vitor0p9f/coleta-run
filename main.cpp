@@ -40,7 +40,7 @@ void drawMenu();
 void drawEnd();
 void keyboardDown(unsigned char key, int x, int y);
 void specialKeysDown(int key, int x, int y);
-
+void mouseClick(int button, int state, int x, int y);
 
 void drawPlay(){
   glClear(GL_COLOR_BUFFER_BIT);
@@ -197,6 +197,8 @@ int main (int argc, char *argv[]) {
   glutSpecialFunc(specialKeysDown);
   glutSpecialUpFunc(OpenGLController::specialKeysUp);
   
+  glutMouseFunc(mouseClick);
+
   glutDisplayFunc(display);
   glutIdleFunc(updateGame);
   glutReshapeFunc(reshape);
