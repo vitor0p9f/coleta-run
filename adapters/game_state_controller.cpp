@@ -168,6 +168,8 @@ void drawEnd(){
     opengl_drawer.spriteManager.draw("end", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     
     GameResult result = game.getResult();
+    
+    glColor3f(0.0f, 0.0f, 0.0f);
 
     switch (result) {
         case GameResult::Player1Win:

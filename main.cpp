@@ -4,14 +4,13 @@
 #include <GL/glu.h>
 #include <cstdio>
 #include <vector>
+#include <clocale>
 #include "domain/game/core.hpp"
 #include "adapters/opengl_drawer.hpp"
 #include "domain/game/player.hpp"
 #include "adapters/opengl_controller.hpp"
 #include "adapters/game_state_controller.hpp"
 #include "domain/interfaces/menu.hpp"
-
-
 
 int WINDOW_WIDTH = 1366;
 int WINDOW_HEIGHT = 768;
@@ -141,6 +140,8 @@ void display() {
 }
 
 int main (int argc, char *argv[]) {
+  setlocale(LC_ALL, "Portuguese");
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
